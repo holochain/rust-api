@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["DnaError",""],["HolochainError","Enum holding all Holochain specific errors"]],"type":[["HcResult",""]]});

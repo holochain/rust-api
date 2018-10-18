@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `entry_meta` mod in crate `holochain_core_types`."><meta name="keywords" content="rust, rustlang, rust-lang, entry_meta"><title>holochain_core_types::entry_meta - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module entry_meta</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../index.html'>holochain_core_types</a></p><script>window.sidebarCurrent = {name: 'entry_meta', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/holochain_core_types/entry_meta.rs.html#1-298' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>holochain_core_types</a>::<wbr><a class="mod" href=''>entry_meta</a></span></h1><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EntryMeta.html"
+                                  title='struct holochain_core_types::entry_meta::EntryMeta'>EntryMeta</a></td>
+                           <td class='docblock-short'>
+                                <p>Meta represents an extended form of EAV (entity-attribute-value) data
+E = the entry key for hash table lookups
+A = the name of the meta attribute
+V = the value of the meta attribute
+txn = a unique (local to the source) monotonically increasing number that can be used for
+crdt/ordering
+@see https://papers.radixdlt.com/tempo/#logical-clocks
+source = the agent making the meta assertion
+signature = the asserting agent's signature of the meta assertion</p>
+
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_attribute.html"
+                                  title='fn holochain_core_types::entry_meta::test_attribute'>test_attribute</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute name</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_attribute_a.html"
+                                  title='fn holochain_core_types::entry_meta::test_attribute_a'>test_attribute_a</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute name, same as test_attribute()</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_attribute_b.html"
+                                  title='fn holochain_core_types::entry_meta::test_attribute_b'>test_attribute_b</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute name, differs from test_attribute()</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_meta.html"
+                                  title='fn holochain_core_types::entry_meta::test_meta'>test_meta</a></td>
+                           <td class='docblock-short'>
+                                <p>returns dummy meta for testing</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_meta_a.html"
+                                  title='fn holochain_core_types::entry_meta::test_meta_a'>test_meta_a</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy meta, same as test_meta()</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_meta_b.html"
+                                  title='fn holochain_core_types::entry_meta::test_meta_b'>test_meta_b</a></td>
+                           <td class='docblock-short'>
+                                <p>returns dummy meta for testing against the same entry as test_meta_a</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_meta_for.html"
+                                  title='fn holochain_core_types::entry_meta::test_meta_for'>test_meta_for</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_value.html"
+                                  title='fn holochain_core_types::entry_meta::test_value'>test_value</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute value</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_value_a.html"
+                                  title='fn holochain_core_types::entry_meta::test_value_a'>test_value_a</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute value, same as test_value()</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.test_value_b.html"
+                                  title='fn holochain_core_types::entry_meta::test_value_b'>test_value_b</a></td>
+                           <td class='docblock-short'>
+                                <p>dummy test attribute value, differs from test_value()</p>
+
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "holochain_core_types";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

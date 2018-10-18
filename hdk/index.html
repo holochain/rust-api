@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `hdk` crate."><meta name="keywords" content="rust, rustlang, rust-lang, hdk"><title>hdk - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate hdk</p><a id='all-types' href='all.html'><p>See all hdk's items</p></a><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'hdk', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/hdk/lib.rs.html#1-21' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>hdk</a></span></h1><div class='docblock'><p>File holding the public Zome API
+All API Reference documentation should be done here.</p>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub extern crate <a class="mod" href="../serde/index.html" title="mod serde">serde</a>;</code></td></tr><tr><td><code>pub extern crate <a class="mod" href="../holochain_wasm_utils/index.html" title="mod holochain_wasm_utils">holochain_wasm_utils</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="global_fns/index.html"
+                                  title='mod hdk::global_fns'>global_fns</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="globals/index.html"
+                                  title='mod hdk::globals'>globals</a></td>
+                           <td class='docblock-short'>
+                                <p>File for holding all internal/private globals used by the zome api library</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="init_globals/index.html"
+                                  title='mod hdk::init_globals'>init_globals</a></td>
+                           <td class='docblock-short'>
+                                <p>File for holding the internal/private zome api function <code>init_globals</code></p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="macros/index.html"
+                                  title='mod hdk::macros'>macros</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.load_json.html"
+                                  title='macro hdk::load_json'>load_json</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.validations.html"
+                                  title='macro hdk::validations'>validations</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.zome_functions.html"
+                                  title='macro hdk::zome_functions'>zome_functions</a></td>
+                           <td class='docblock-short'>
+                                <p>A macro for easily writing zome functions</p>
+
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_AGENT_ID_STR.html"
+                                  title='struct hdk::APP_AGENT_ID_STR'>APP_AGENT_ID_STR</a></td>
+                           <td class='docblock-short'>
+                                <p>The identity string used when the chain was first initialized.
+If you used JSON to embed multiple properties (such as FirstName, LastName, Email, etc),
+they can be retrieved here as App.Agent.FirstName, etc. (FIXME)</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_AGENT_INITIAL_HASH.html"
+                                  title='struct hdk::APP_AGENT_INITIAL_HASH'>APP_AGENT_INITIAL_HASH</a></td>
+                           <td class='docblock-short'>
+                                <p>The hash of the first identity entry on your chain (The second entry on your chain).
+This is your peer's identity on the DHT.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_AGENT_KEY_HASH.html"
+                                  title='struct hdk::APP_AGENT_KEY_HASH'>APP_AGENT_KEY_HASH</a></td>
+                           <td class='docblock-short'>
+                                <p>The hash of your public key.
+This is your node address on the DHT.
+It can be used for node-to-node messaging with <code>send</code> and <code>receive</code> functions.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_AGENT_LATEST_HASH.html"
+                                  title='struct hdk::APP_AGENT_LATEST_HASH'>APP_AGENT_LATEST_HASH</a></td>
+                           <td class='docblock-short'>
+                                <p>The hash of the most recent identity entry that has been committed to your chain.
+Starts with the same value as APP_AGENT_INITIAL_HASH.
+After a call to <code>update_agent</code> it will have the value of the hash of the newly committed identity entry.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_DNA_HASH.html"
+                                  title='struct hdk::APP_DNA_HASH'>APP_DNA_HASH</a></td>
+                           <td class='docblock-short'>
+                                <p>The hash of this Holochain's DNA.
+Nodes must run the same DNA to be on the same DHT.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.APP_NAME.html"
+                                  title='struct hdk::APP_NAME'>APP_NAME</a></td>
+                           <td class='docblock-short'>
+                                <p>The name of this Holochain taken from its DNA.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.EntryStatus.html"
+                                  title='struct hdk::EntryStatus'>EntryStatus</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.GetEntryMask.html"
+                                  title='struct hdk::GetEntryMask'>GetEntryMask</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.ValidationData.html"
+                                  title='struct hdk::ValidationData'>ValidationData</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.BundleOnClose.html"
+                                  title='enum hdk::BundleOnClose'>BundleOnClose</a></td>
+                           <td class='docblock-short'>
+                                <p>Allowed input for close_bundle()</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.EntryAction.html"
+                                  title='enum hdk::EntryAction'>EntryAction</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.EntryLifecycle.html"
+                                  title='enum hdk::EntryLifecycle'>EntryLifecycle</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.LinkAction.html"
+                                  title='enum hdk::LinkAction'>LinkAction</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.RibosomeError.html"
+                                  title='enum hdk::RibosomeError'>RibosomeError</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.call.html"
+                                  title='fn hdk::call'>call</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.close_bundle.html"
+                                  title='fn hdk::close_bundle'>close_bundle</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.commit_entry.html"
+                                  title='fn hdk::commit_entry'>commit_entry</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.debug.html"
+                                  title='fn hdk::debug'>debug</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.get_entry.html"
+                                  title='fn hdk::get_entry'>get_entry</a></td>
+                           <td class='docblock-short'>
+                                <p>implements access to low-level WASM hc_get_entry</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.get_links.html"
+                                  title='fn hdk::get_links'>get_links</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.link_entries.html"
+                                  title='fn hdk::link_entries'>link_entries</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.make_hash.html"
+                                  title='fn hdk::make_hash'>make_hash</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.property.html"
+                                  title='fn hdk::property'>property</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC
+Returns an application property, which are defined by the app developer.
+It returns values from the DNA file that you set as properties of your application
+(e.g. Name, Language, Description, Author, etc.).</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.query.html"
+                                  title='fn hdk::query'>query</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.remove_entry.html"
+                                  title='fn hdk::remove_entry'>remove_entry</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC
+Commit a Deletion System Entry</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.send.html"
+                                  title='fn hdk::send'>send</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.sign.html"
+                                  title='fn hdk::sign'>sign</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.start_bundle.html"
+                                  title='fn hdk::start_bundle'>start_bundle</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.update_agent.html"
+                                  title='fn hdk::update_agent'>update_agent</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.update_entry.html"
+                                  title='fn hdk::update_entry'>update_entry</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.verify_signature.html"
+                                  title='fn hdk::verify_signature'>verify_signature</a></td>
+                           <td class='docblock-short'>
+                                <p>FIXME DOC</p>
+
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "hdk";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
