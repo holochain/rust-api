@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["GetResultStatus",""]],"struct":[["GetEntryArgs",""],["GetEntryResult",""]]});
+initSidebarItems({"enum":[["GetResultStatus",""]],"struct":[["GetEntryArgs",""],["GetEntryOptions",""],["GetEntryResult",""]]});

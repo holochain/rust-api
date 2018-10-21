@@ -58,9 +58,8 @@
 <span id="58">58</span>
 <span id="59">59</span>
 <span id="60">60</span>
-<span id="61">61</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::<span class="ident">api</span>::<span class="ident">Runtime</span>;
+<span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::<span class="ident">Runtime</span>;
 <span class="kw">use</span> <span class="ident">wasmi</span>::{<span class="ident">RuntimeArgs</span>, <span class="ident">RuntimeValue</span>, <span class="ident">Trap</span>};
 
 <span class="kw">use</span> <span class="ident">serde_json</span>;
@@ -84,7 +83,7 @@
     <span class="ident">_args</span>: <span class="kw-2">&amp;</span><span class="ident">RuntimeArgs</span>,
 ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RuntimeValue</span><span class="op">&gt;</span>, <span class="ident">Trap</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">globals</span> <span class="op">=</span> <span class="ident">InitGlobalsOutput</span> {
-        <span class="ident">app_name</span>: <span class="ident">runtime</span>.<span class="ident">app_name</span>.<span class="ident">to_string</span>(),
+        <span class="ident">app_name</span>: <span class="ident">runtime</span>.<span class="ident">dna_name</span>.<span class="ident">to_string</span>(),
 
         <span class="comment">// TODO #232 - Implement Dna hash</span>
         <span class="ident">app_dna_hash</span>: <span class="string">&quot;FIXME-app_dna_hash&quot;</span>.<span class="ident">to_string</span>(),
@@ -105,7 +104,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::{
-        <span class="ident">api</span>::{<span class="ident">tests</span>::<span class="ident">test_zome_api_function_runtime</span>, <span class="ident">ZomeApiFunction</span>},
+        <span class="ident">api</span>::{<span class="ident">tests</span>::<span class="ident">test_zome_api_function</span>, <span class="ident">ZomeApiFunction</span>},
         <span class="ident">Defn</span>,
     };
 
@@ -113,11 +112,10 @@
     <span class="doccomment">/// test that bytes passed to debug end up in the log</span>
     <span class="kw">fn</span> <span class="ident">test_init_globals</span>() {
         <span class="kw">let</span> <span class="ident">input</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
-        <span class="kw">let</span> (<span class="ident">runtime</span>, <span class="kw">_</span>) <span class="op">=</span>
-            <span class="ident">test_zome_api_function_runtime</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">InitGlobals</span>.<span class="ident">as_str</span>(), <span class="ident">input</span>);
+        <span class="kw">let</span> (<span class="ident">call_result</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">test_zome_api_function</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">InitGlobals</span>.<span class="ident">as_str</span>(), <span class="ident">input</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
-      <span class="ident">runtime</span>.<span class="ident">result</span>.<span class="ident">to_string</span>(),
-      <span class="string">&quot;{\&quot;app_name\&quot;:\&quot;TestApp\&quot;,\&quot;app_dna_hash\&quot;:\&quot;FIXME-app_dna_hash\&quot;,\&quot;app_agent_id_str\&quot;:\&quot;joan\&quot;,\&quot;app_agent_key_hash\&quot;:\&quot;FIXME-app_agent_key_hash\&quot;,\&quot;app_agent_initial_hash\&quot;:\&quot;FIXME-app_agent_initial_hash\&quot;,\&quot;app_agent_latest_hash\&quot;:\&quot;FIXME-app_agent_latest_hash\&quot;}\u{0}&quot;</span>
+            <span class="ident">call_result</span>,
+            <span class="string">&quot;{\&quot;app_name\&quot;:\&quot;TestApp\&quot;,\&quot;app_dna_hash\&quot;:\&quot;FIXME-app_dna_hash\&quot;,\&quot;app_agent_id_str\&quot;:\&quot;joan\&quot;,\&quot;app_agent_key_hash\&quot;:\&quot;FIXME-app_agent_key_hash\&quot;,\&quot;app_agent_initial_hash\&quot;:\&quot;FIXME-app_agent_initial_hash\&quot;,\&quot;app_agent_latest_hash\&quot;:\&quot;FIXME-app_agent_latest_hash\&quot;}\u{0}&quot;</span>
         .<span class="ident">to_string</span>());
     }
 }

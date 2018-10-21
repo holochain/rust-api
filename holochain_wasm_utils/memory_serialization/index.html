@@ -1,10 +1,11 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `memory_serialization` mod in crate `holochain_wasm_utils`."><meta name="keywords" content="rust, rustlang, rust-lang, memory_serialization"><title>holochain_wasm_utils::memory_serialization - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module memory_serialization</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../index.html'>holochain_wasm_utils</a></p><script>window.sidebarCurrent = {name: 'memory_serialization', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/holochain_wasm_utils/memory_serialization.rs.html#1-114' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>holochain_wasm_utils</a>::<wbr><a class="mod" href=''>memory_serialization</a></span></h1><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `memory_serialization` mod in crate `holochain_wasm_utils`."><meta name="keywords" content="rust, rustlang, rust-lang, memory_serialization"><title>holochain_wasm_utils::memory_serialization - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Module memory_serialization</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../index.html'>holochain_wasm_utils</a></p><script>window.sidebarCurrent = {name: 'memory_serialization', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/holochain_wasm_utils/memory_serialization.rs.html#1-123' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>holochain_wasm_utils</a>::<wbr><a class="mod" href=''>memory_serialization</a></span></h1><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class="fn" href="fn.load_json.html"
                                   title='fn holochain_wasm_utils::memory_serialization::load_json'>load_json</a></td>
                            <td class='docblock-short'>
-                                <p>Expecting to retrieve a struct from an encoded allocation, but return error string in case of error</p>
+                                <p>Retrieve a stored data struct from an encoded allocation.
+Return error string if encoded_allocation is invalid.</p>
 
                            </td>
                        </tr>
@@ -19,16 +20,40 @@ If that also failed, tries to load a string directly, since we are expecting an 
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.load_string.html"
+                                  title='fn holochain_wasm_utils::memory_serialization::load_string'>load_string</a></td>
+                           <td class='docblock-short'>
+                                <p>Retrieve a stored string from an encoded allocation.
+Return error string if encoded_allocation is invalid.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.store_as_json.html"
                                   title='fn holochain_wasm_utils::memory_serialization::store_as_json'>store_as_json</a></td>
                            <td class='docblock-short'>
-                                <p>Write a data struct as a json string in wasm memory</p>
+                                <p>Write a data struct as a json string in wasm memory according to stack state.</p>
 
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class="fn" href="fn.store_json_into_encoded_allocation.html"
                                   title='fn holochain_wasm_utils::memory_serialization::store_json_into_encoded_allocation'>store_json_into_encoded_allocation</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.store_string.html"
+                                  title='fn holochain_wasm_utils::memory_serialization::store_string'>store_string</a></td>
+                           <td class='docblock-short'>
+                                <p>Write a string in wasm memory according to stack state.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.store_string_into_encoded_allocation.html"
+                                  title='fn holochain_wasm_utils::memory_serialization::store_string_into_encoded_allocation'>store_string_into_encoded_allocation</a></td>
                            <td class='docblock-short'>
                                 
                            </td>

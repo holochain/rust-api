@@ -74,14 +74,12 @@
 <span id="74">74</span>
 <span id="75">75</span>
 <span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">action</span>::<span class="ident">ActionWrapper</span>;
 <span class="kw">use</span> <span class="ident">agent</span>::{<span class="ident">chain_store</span>::<span class="ident">ChainStore</span>, <span class="ident">state</span>::<span class="ident">AgentState</span>};
 <span class="kw">use</span> <span class="ident">context</span>::<span class="ident">Context</span>;
 <span class="kw">use</span> <span class="ident">dht</span>::<span class="ident">dht_store</span>::<span class="ident">DhtStore</span>;
-<span class="kw">use</span> <span class="ident">holochain_cas_implementations</span>::{<span class="ident">cas</span>::<span class="ident">memory</span>::<span class="ident">MemoryStorage</span>, <span class="ident">eav</span>::<span class="ident">memory</span>::<span class="ident">EavMemoryStorage</span>};
+<span class="kw">use</span> <span class="ident">holochain_cas_implementations</span>::{<span class="ident">cas</span>::<span class="ident">file</span>::<span class="ident">FilesystemStorage</span>, <span class="ident">eav</span>::<span class="ident">file</span>::<span class="ident">EavFileStorage</span>};
 <span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">state</span>::<span class="ident">NucleusState</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections</span>::<span class="ident">HashSet</span>, <span class="ident">sync</span>::<span class="ident">Arc</span>};
 
@@ -92,25 +90,23 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">State</span> {
     <span class="ident">nucleus</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">NucleusState</span><span class="op">&gt;</span>,
     <span class="ident">agent</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AgentState</span><span class="op">&gt;</span>,
-    <span class="ident">dht</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">DhtStore</span><span class="op">&lt;</span><span class="ident">MemoryStorage</span>, <span class="ident">EavMemoryStorage</span><span class="op">&gt;&gt;</span>,
+    <span class="ident">dht</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">DhtStore</span><span class="op">&lt;</span><span class="ident">FilesystemStorage</span>, <span class="ident">EavFileStorage</span><span class="op">&gt;&gt;</span>,
     <span class="comment">// @TODO eventually drop stale history</span>
     <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/166</span>
     <span class="kw">pub</span> <span class="ident">history</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">ActionWrapper</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">State</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="comment">// @TODO file table</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/pull/246</span>
 
-        <span class="kw">let</span> <span class="ident">content_storage</span> <span class="op">=</span>
-            <span class="ident">MemoryStorage</span>::<span class="ident">new</span>().<span class="ident">expect</span>(<span class="string">&quot;could not create new cas memory storage&quot;</span>);
-        <span class="kw">let</span> <span class="ident">eav_storage</span> <span class="op">=</span> <span class="ident">EavMemoryStorage</span>::<span class="ident">new</span>().<span class="ident">expect</span>(<span class="string">&quot;could not create new eav memory storage&quot;</span>);
-
+        <span class="kw">let</span> <span class="ident">cas</span> <span class="op">=</span> <span class="kw-2">&amp;</span>(<span class="kw-2">*</span><span class="ident">context</span>).<span class="ident">file_storage</span>;
+        <span class="kw">let</span> <span class="ident">eav</span> <span class="op">=</span> <span class="kw-2">&amp;</span>(<span class="kw-2">*</span><span class="ident">context</span>).<span class="ident">eav_storage</span>;
         <span class="ident">State</span> {
             <span class="ident">nucleus</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">NucleusState</span>::<span class="ident">new</span>()),
-            <span class="ident">agent</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">AgentState</span>::<span class="ident">new</span>(<span class="ident">ChainStore</span>::<span class="ident">new</span>(<span class="ident">content_storage</span>.<span class="ident">clone</span>()))),
-            <span class="ident">dht</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">DhtStore</span>::<span class="ident">new</span>(<span class="ident">content_storage</span>.<span class="ident">clone</span>(), <span class="ident">eav_storage</span>.<span class="ident">clone</span>())),
+            <span class="ident">agent</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">AgentState</span>::<span class="ident">new</span>(<span class="ident">ChainStore</span>::<span class="ident">new</span>(<span class="ident">cas</span>.<span class="ident">clone</span>()))),
+            <span class="ident">dht</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">DhtStore</span>::<span class="ident">new</span>(<span class="ident">cas</span>.<span class="ident">clone</span>(), <span class="ident">eav</span>.<span class="ident">clone</span>())),
             <span class="ident">history</span>: <span class="ident">HashSet</span>::<span class="ident">new</span>(),
         }
     }
@@ -147,13 +143,13 @@
         <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">agent</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dht</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">DhtStore</span><span class="op">&lt;</span><span class="ident">MemoryStorage</span>, <span class="ident">EavMemoryStorage</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dht</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">DhtStore</span><span class="op">&lt;</span><span class="ident">FilesystemStorage</span>, <span class="ident">EavFileStorage</span><span class="op">&gt;&gt;</span> {
         <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">dht</span>)
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_store</span>() <span class="op">-&gt;</span> <span class="ident">State</span> {
-    <span class="ident">State</span>::<span class="ident">new</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_store</span>(<span class="ident">context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">State</span> {
+    <span class="ident">State</span>::<span class="ident">new</span>(<span class="ident">context</span>)
 }
 </pre>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "holochain_core";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

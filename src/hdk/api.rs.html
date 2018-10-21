@@ -385,7 +385,7 @@
 <span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::{
     <span class="ident">api_serialization</span>::{
         <span class="ident">commit</span>::{<span class="ident">CommitEntryArgs</span>, <span class="ident">CommitEntryResult</span>},
-        <span class="ident">get_entry</span>::{<span class="ident">GetEntryArgs</span>, <span class="ident">GetEntryResult</span>, <span class="ident">GetResultStatus</span>},
+        <span class="ident">get_entry</span>::{<span class="ident">GetEntryArgs</span>, <span class="ident">GetEntryOptions</span>, <span class="ident">GetEntryResult</span>},
     },
     <span class="ident">holochain_core_types</span>::<span class="ident">hash</span>::<span class="ident">HashString</span>,
     <span class="ident">memory_allocation</span>::<span class="kw-2">*</span>,
@@ -671,7 +671,10 @@
 }
 
 <span class="doccomment">/// implements access to low-level WASM hc_get_entry</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_entry</span>(<span class="ident">entry_hash</span>: <span class="ident">HashString</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">RibosomeError</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_entry</span>(
+    <span class="ident">entry_hash</span>: <span class="ident">HashString</span>,
+    <span class="ident">_options</span>: <span class="ident">GetEntryOptions</span>,
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GetEntryResult</span>, <span class="ident">RibosomeError</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mem_stack</span>: <span class="ident">SinglePageStack</span>;
     <span class="kw">unsafe</span> {
         <span class="ident">mem_stack</span> <span class="op">=</span> <span class="ident">G_MEM_STACK</span>.<span class="ident">unwrap</span>();
@@ -704,10 +707,7 @@
         .<span class="ident">deallocate</span>(<span class="ident">allocation_of_input</span>)
         .<span class="ident">expect</span>(<span class="string">&quot;deallocate failed&quot;</span>);
 
-    <span class="kw">match</span> <span class="ident">result</span>.<span class="ident">status</span> {
-        <span class="ident">GetResultStatus</span>::<span class="ident">Found</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">result</span>.<span class="ident">entry</span>)),
-        <span class="ident">GetResultStatus</span>::<span class="ident">NotFound</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-    }
+    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
 }
 
 <span class="doccomment">/// FIXME DOC</span>

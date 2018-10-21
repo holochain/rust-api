@@ -83,6 +83,8 @@
 <span id="83">83</span>
 <span id="84">84</span>
 <span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
 </pre><pre class="rust ">
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">actor</span>;
 <span class="kw">use</span> <span class="ident">actor</span>::{<span class="ident">AskSelf</span>, <span class="ident">Protocol</span>};
@@ -96,7 +98,7 @@
 };
 <span class="kw">use</span> <span class="ident">riker</span>::<span class="ident">actors</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FilesystemStorage</span> {
     <span class="ident">actor</span>: <span class="ident">ActorRef</span><span class="op">&lt;</span><span class="ident">Protocol</span><span class="op">&gt;</span>,
 }
@@ -141,12 +143,14 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tempfile</span>;
+
+    <span class="kw">use</span> <span class="self">self</span>::<span class="ident">tempfile</span>::{<span class="ident">tempdir</span>, <span class="ident">TempDir</span>};
     <span class="kw">use</span> <span class="ident">cas</span>::<span class="ident">file</span>::<span class="ident">FilesystemStorage</span>;
     <span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">cas</span>::{
         <span class="ident">content</span>::{<span class="ident">ExampleAddressableContent</span>, <span class="ident">OtherExampleAddressableContent</span>},
         <span class="ident">storage</span>::<span class="ident">StorageTestSuite</span>,
     };
-    <span class="kw">use</span> <span class="ident">tempfile</span>::{<span class="ident">tempdir</span>, <span class="ident">TempDir</span>};
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_file_cas</span>() <span class="op">-&gt;</span> (<span class="ident">FilesystemStorage</span>, <span class="ident">TempDir</span>) {
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();

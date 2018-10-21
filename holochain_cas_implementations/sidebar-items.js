@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["actor",""],["cas",""],["eav",""]]});
+initSidebarItems({"mod":[["actor",""],["cas",""],["eav",""],["path",""]]});

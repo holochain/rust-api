@@ -253,10 +253,12 @@
 <span id="253">253</span>
 <span id="254">254</span>
 <span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">executor</span>::<span class="ident">block_on</span>;
 <span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::<span class="ident">api_serialization</span>::<span class="ident">get_entry</span>::{<span class="ident">GetEntryArgs</span>, <span class="ident">GetEntryResult</span>};
-<span class="kw">use</span> <span class="ident">nucleus</span>::{<span class="ident">actions</span>::<span class="ident">get_entry</span>::<span class="ident">get_entry</span>, <span class="ident">ribosome</span>::<span class="ident">api</span>::<span class="ident">Runtime</span>};
+<span class="kw">use</span> <span class="ident">nucleus</span>::{<span class="ident">actions</span>::<span class="ident">get_entry</span>::<span class="ident">get_entry</span>, <span class="ident">ribosome</span>::<span class="ident">Runtime</span>};
 <span class="kw">use</span> <span class="ident">serde_json</span>;
 <span class="kw">use</span> <span class="ident">wasmi</span>::{<span class="ident">RuntimeArgs</span>, <span class="ident">RuntimeValue</span>, <span class="ident">Trap</span>};
 
@@ -310,10 +312,12 @@
     };
     <span class="kw">use</span> <span class="ident">instance</span>::<span class="ident">tests</span>::{<span class="ident">test_context_and_logger</span>, <span class="ident">test_instance</span>};
     <span class="kw">use</span> <span class="ident">nucleus</span>::{
-        <span class="ident">ribosome</span>::<span class="ident">api</span>::{
-            <span class="ident">call</span>,
-            <span class="ident">commit</span>::<span class="ident">tests</span>::<span class="ident">test_commit_args_bytes</span>,
-            <span class="ident">tests</span>::{<span class="ident">test_capability</span>, <span class="ident">test_parameters</span>, <span class="ident">test_zome_name</span>},
+        <span class="ident">ribosome</span>::{
+            <span class="self">self</span>,
+            <span class="ident">api</span>::{
+                <span class="ident">commit</span>::<span class="ident">tests</span>::<span class="ident">test_commit_args_bytes</span>,
+                <span class="ident">tests</span>::{<span class="ident">test_capability</span>, <span class="ident">test_parameters</span>, <span class="ident">test_zome_name</span>},
+            },
         },
         <span class="ident">ZomeFnCall</span>,
     };
@@ -428,7 +432,7 @@
             <span class="string">&quot;commit_dispatch&quot;</span>,
             <span class="kw-2">&amp;</span><span class="ident">test_parameters</span>(),
         );
-        <span class="kw">let</span> <span class="ident">commit_runtime</span> <span class="op">=</span> <span class="ident">call</span>(
+        <span class="kw">let</span> <span class="ident">call_result</span> <span class="op">=</span> <span class="ident">ribosome</span>::<span class="ident">run_dna</span>(
             <span class="kw-2">&amp;</span><span class="ident">dna</span>.<span class="ident">name</span>.<span class="ident">to_string</span>(),
             <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>),
             <span class="ident">wasm</span>.<span class="ident">clone</span>(),
@@ -437,7 +441,7 @@
         ).<span class="ident">expect</span>(<span class="string">&quot;test should be callable&quot;</span>);
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">commit_runtime</span>.<span class="ident">result</span>,
+            <span class="ident">call_result</span>,
             <span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">r#&quot;{{&quot;address&quot;:&quot;{}&quot;,&quot;validation_failure&quot;:&quot;&quot;}}&quot;#</span>,
                 <span class="ident">test_entry</span>().<span class="ident">address</span>()
@@ -450,7 +454,7 @@
             <span class="string">&quot;get_dispatch&quot;</span>,
             <span class="kw-2">&amp;</span><span class="ident">test_parameters</span>(),
         );
-        <span class="kw">let</span> <span class="ident">get_runtime</span> <span class="op">=</span> <span class="ident">call</span>(
+        <span class="kw">let</span> <span class="ident">call_result</span> <span class="op">=</span> <span class="ident">ribosome</span>::<span class="ident">run_dna</span>(
             <span class="kw-2">&amp;</span><span class="ident">dna</span>.<span class="ident">name</span>.<span class="ident">to_string</span>(),
             <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>),
             <span class="ident">wasm</span>.<span class="ident">clone</span>(),
@@ -461,7 +465,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_owned</span>();
         <span class="ident">expected</span>.<span class="ident">push_str</span>(<span class="string">&quot;{\&quot;status\&quot;:\&quot;Found\&quot;,\&quot;entry\&quot;:\&quot;test entry value\&quot;}\u{0}&quot;</span>);
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">expected</span>, <span class="ident">get_runtime</span>.<span class="ident">result</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">expected</span>, <span class="ident">call_result</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -494,7 +498,7 @@
             <span class="string">&quot;get_dispatch&quot;</span>,
             <span class="kw-2">&amp;</span><span class="ident">test_parameters</span>(),
         );
-        <span class="kw">let</span> <span class="ident">get_runtime</span> <span class="op">=</span> <span class="ident">call</span>(
+        <span class="kw">let</span> <span class="ident">call_result</span> <span class="op">=</span> <span class="ident">ribosome</span>::<span class="ident">run_dna</span>(
             <span class="kw-2">&amp;</span><span class="ident">dna</span>.<span class="ident">name</span>.<span class="ident">to_string</span>(),
             <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>),
             <span class="ident">wasm</span>.<span class="ident">clone</span>(),
@@ -505,7 +509,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_owned</span>();
         <span class="ident">expected</span>.<span class="ident">push_str</span>(<span class="string">&quot;{\&quot;status\&quot;:\&quot;NotFound\&quot;,\&quot;entry\&quot;:\&quot;\&quot;}\u{0}&quot;</span>);
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">expected</span>, <span class="ident">get_runtime</span>.<span class="ident">result</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">expected</span>, <span class="ident">call_result</span>);
     }
 
 }

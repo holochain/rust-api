@@ -181,14 +181,67 @@
 <span id="181">181</span>
 <span id="182">182</span>
 <span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
 </pre><pre class="rust ">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_agent</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_cas_implementations</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_core</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_core_api</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_dna</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tempfile</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">wabt</span>;
 
 <span class="kw">use</span> <span class="ident">holochain_agent</span>::<span class="ident">Agent</span>;
-<span class="kw">use</span> <span class="ident">holochain_core</span>::{<span class="ident">context</span>::<span class="ident">Context</span>, <span class="ident">logger</span>::<span class="ident">Logger</span>, <span class="ident">persister</span>::<span class="ident">SimplePersister</span>};
+<span class="kw">use</span> <span class="ident">holochain_cas_implementations</span>::{<span class="ident">cas</span>::<span class="ident">file</span>::<span class="ident">FilesystemStorage</span>, <span class="ident">eav</span>::<span class="ident">file</span>::<span class="ident">EavFileStorage</span>};
+<span class="kw">use</span> <span class="ident">holochain_core</span>::{
+    <span class="ident">context</span>::<span class="ident">Context</span>, <span class="ident">logger</span>::<span class="ident">Logger</span>, <span class="ident">nucleus</span>::<span class="ident">ZomeFnResult</span>, <span class="ident">persister</span>::<span class="ident">SimplePersister</span>,
+};
+<span class="kw">use</span> <span class="ident">holochain_core_api</span>::<span class="ident">Holochain</span>;
 <span class="kw">use</span> <span class="ident">holochain_dna</span>::{
     <span class="ident">wasm</span>::<span class="ident">DnaWasm</span>,
     <span class="ident">zome</span>::{
@@ -206,6 +259,7 @@
     <span class="ident">io</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>,
     <span class="ident">sync</span>::{<span class="ident">Arc</span>, <span class="ident">Mutex</span>},
 };
+<span class="kw">use</span> <span class="ident">tempfile</span>::<span class="ident">tempdir</span>;
 <span class="kw">use</span> <span class="ident">wabt</span>::<span class="ident">Wat2Wasm</span>;
 
 <span class="doccomment">/// Load WASM from filesystem</span>
@@ -343,11 +397,16 @@
     <span class="kw">let</span> <span class="ident">agent</span> <span class="op">=</span> <span class="ident">Agent</span>::<span class="ident">from</span>(<span class="ident">agent_name</span>.<span class="ident">to_string</span>());
     <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">test_logger</span>();
     (
-        <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Context</span>::<span class="ident">new</span>(
-            <span class="ident">agent</span>,
-            <span class="ident">logger</span>.<span class="ident">clone</span>(),
-            <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">SimplePersister</span>::<span class="ident">new</span>())),
-        )),
+        <span class="ident">Arc</span>::<span class="ident">new</span>(
+            <span class="ident">Context</span>::<span class="ident">new</span>(
+                <span class="ident">agent</span>,
+                <span class="ident">logger</span>.<span class="ident">clone</span>(),
+                <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">SimplePersister</span>::<span class="ident">new</span>())),
+                <span class="ident">FilesystemStorage</span>::<span class="ident">new</span>(<span class="ident">tempdir</span>().<span class="ident">unwrap</span>().<span class="ident">path</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>(),
+                <span class="ident">EavFileStorage</span>::<span class="ident">new</span>(<span class="ident">tempdir</span>().<span class="ident">unwrap</span>().<span class="ident">path</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>().<span class="ident">to_string</span>())
+                    .<span class="ident">unwrap</span>(),
+            ).<span class="ident">unwrap</span>(),
+        ),
         <span class="ident">logger</span>,
     )
 }
@@ -364,6 +423,39 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">DefaultHasher</span>::<span class="ident">new</span>();
     <span class="ident">t</span>.<span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>);
     <span class="ident">s</span>.<span class="ident">finish</span>()
+}
+
+<span class="comment">// Function called at start of all unit tests:</span>
+<span class="comment">//   Startup holochain and do a call on the specified wasm function.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hc_setup_and_call_zome_fn</span>(<span class="ident">wasm_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">ZomeFnResult</span> {
+    <span class="comment">// Setup the holochain instance</span>
+    <span class="kw">let</span> <span class="ident">wasm</span> <span class="op">=</span> <span class="ident">create_wasm_from_file</span>(<span class="ident">wasm_path</span>);
+    <span class="kw">let</span> <span class="ident">capability</span> <span class="op">=</span> <span class="ident">create_test_cap_with_fn_name</span>(<span class="ident">fn_name</span>);
+    <span class="kw">let</span> <span class="ident">dna</span> <span class="op">=</span> <span class="ident">create_test_dna_with_cap</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">capability</span>, <span class="kw-2">&amp;</span><span class="ident">wasm</span>);
+
+    <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="ident">create_test_context</span>(<span class="string">&quot;alex&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hc</span> <span class="op">=</span> <span class="ident">Holochain</span>::<span class="ident">new</span>(<span class="ident">dna</span>.<span class="ident">clone</span>(), <span class="ident">context</span>).<span class="ident">unwrap</span>();
+
+    <span class="comment">// Run the holochain instance</span>
+    <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
+    <span class="comment">// Call the exposed wasm function</span>
+    <span class="kw">return</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="ident">fn_name</span>, <span class="string">r#&quot;{}&quot;#</span>);
+}
+
+<span class="doccomment">/// create a test context and TestLogger pair so we can use the logger in assertions</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_test_context</span>(<span class="ident">agent_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">agent</span> <span class="op">=</span> <span class="ident">Agent</span>::<span class="ident">from</span>(<span class="ident">agent_name</span>.<span class="ident">to_string</span>());
+    <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">test_logger</span>();
+
+    <span class="kw">return</span> <span class="ident">Arc</span>::<span class="ident">new</span>(
+        <span class="ident">Context</span>::<span class="ident">new</span>(
+            <span class="ident">agent</span>,
+            <span class="ident">logger</span>.<span class="ident">clone</span>(),
+            <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">SimplePersister</span>::<span class="ident">new</span>())),
+            <span class="ident">FilesystemStorage</span>::<span class="ident">new</span>(<span class="ident">tempdir</span>().<span class="ident">unwrap</span>().<span class="ident">path</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>(),
+            <span class="ident">EavFileStorage</span>::<span class="ident">new</span>(<span class="ident">tempdir</span>().<span class="ident">unwrap</span>().<span class="ident">path</span>().<span class="ident">to_str</span>().<span class="ident">unwrap</span>().<span class="ident">to_string</span>()).<span class="ident">unwrap</span>(),
+        ).<span class="ident">unwrap</span>(),
+    );
 }
 </pre>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "test_utils";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>
