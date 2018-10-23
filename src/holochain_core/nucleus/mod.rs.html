@@ -696,6 +696,14 @@
 <span id="696">696</span>
 <span id="697">697</span>
 <span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
 </pre><pre class="rust ">
 <span class="doccomment">/// Nucleus is the module that handles DNA, including the Ribosome.</span>
 <span class="doccomment">///</span>
@@ -905,14 +913,14 @@
     <span class="ident">context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>,
     <span class="ident">zome_call</span>: <span class="ident">ZomeFnCall</span>,
     <span class="ident">wasm</span>: <span class="kw-2">&amp;</span><span class="ident">DnaWasm</span>,
-    <span class="ident">app_name</span>: <span class="ident">String</span>,
+    <span class="ident">dna_name</span>: <span class="ident">String</span>,
 ) {
     <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">wasm</span>.<span class="ident">code</span>.<span class="ident">clone</span>();
 
     <span class="ident">thread</span>::<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">||</span> {
         <span class="comment">// Have Ribosome spin up DNA and call the zome function</span>
         <span class="kw">let</span> <span class="ident">call_result</span> <span class="op">=</span> <span class="ident">ribosome</span>::<span class="ident">run_dna</span>(
-            <span class="kw-2">&amp;</span><span class="ident">app_name</span>,
+            <span class="kw-2">&amp;</span><span class="ident">dna_name</span>,
             <span class="ident">context</span>.<span class="ident">clone</span>(),
             <span class="ident">code</span>,
             <span class="kw-2">&amp;</span><span class="ident">zome_call</span>,
@@ -976,7 +984,7 @@
             <span class="ident">dispatch_error_result</span>(
                 <span class="kw-2">&amp;</span><span class="ident">context</span>.<span class="ident">action_channel</span>,
                 <span class="kw-2">&amp;</span><span class="ident">fn_call</span>,
-                <span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
+                <span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;Zome &#39;{}&#39; not found&quot;</span>,
                     <span class="ident">fn_call</span>.<span class="ident">zome_name</span>.<span class="ident">clone</span>()
                 ))),
@@ -991,7 +999,7 @@
             <span class="ident">dispatch_error_result</span>(
                 <span class="kw-2">&amp;</span><span class="ident">context</span>.<span class="ident">action_channel</span>,
                 <span class="kw-2">&amp;</span><span class="ident">fn_call</span>,
-                <span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">DnaError</span>::<span class="ident">CapabilityNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
+                <span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">DnaError</span>::<span class="ident">CapabilityNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;Capability &#39;{}&#39; not found in Zome &#39;{}&#39;&quot;</span>,
                     <span class="ident">fn_call</span>.<span class="ident">cap_name</span>.<span class="ident">clone</span>(),
                     <span class="ident">fn_call</span>.<span class="ident">zome_name</span>.<span class="ident">clone</span>()
@@ -1010,7 +1018,7 @@
         <span class="ident">dispatch_error_result</span>(
             <span class="kw-2">&amp;</span><span class="ident">context</span>.<span class="ident">action_channel</span>,
             <span class="kw-2">&amp;</span><span class="ident">fn_call</span>,
-            <span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeFunctionNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
+            <span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeFunctionNotFound</span>(<span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">&quot;Zome function &#39;{}&#39; not found&quot;</span>,
                 <span class="ident">fn_call</span>.<span class="ident">fn_name</span>.<span class="ident">clone</span>()
             ))),
@@ -1057,6 +1065,18 @@
     <span class="ident">state</span>.<span class="ident">zome_calls</span>.<span class="ident">insert</span>(<span class="ident">fr</span>.<span class="ident">call</span>(), <span class="prelude-val">Some</span>(<span class="ident">fr</span>.<span class="ident">result</span>()));
 }
 
+<span class="kw">fn</span> <span class="ident">reduce_return_validation_package</span>(
+    <span class="ident">_context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>,
+    <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">NucleusState</span>,
+    <span class="ident">action_wrapper</span>: <span class="kw-2">&amp;</span><span class="ident">ActionWrapper</span>,
+) {
+    <span class="kw">let</span> <span class="ident">action</span> <span class="op">=</span> <span class="ident">action_wrapper</span>.<span class="ident">action</span>();
+    <span class="kw">let</span> (<span class="ident">id</span>, <span class="ident">maybe_validation_package</span>) <span class="op">=</span> <span class="macro">unwrap_to</span><span class="macro">!</span>(<span class="ident">action</span> <span class="op">=&gt;</span> <span class="ident">Action</span>::<span class="ident">ReturnValidationPackage</span>);
+    <span class="ident">state</span>
+        .<span class="ident">validation_packages</span>
+        .<span class="ident">insert</span>(<span class="ident">id</span>.<span class="ident">clone</span>(), <span class="ident">maybe_validation_package</span>.<span class="ident">clone</span>());
+}
+
 <span class="doccomment">/// Maps incoming action to the correct reducer</span>
 <span class="kw">fn</span> <span class="ident">resolve_reducer</span>(<span class="ident">action_wrapper</span>: <span class="kw-2">&amp;</span><span class="ident">ActionWrapper</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NucleusReduceFn</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">action_wrapper</span>.<span class="ident">action</span>() {
@@ -1066,6 +1086,7 @@
         <span class="ident">Action</span>::<span class="ident">ReturnZomeFunctionResult</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_return_zome_function_result</span>),
         <span class="ident">Action</span>::<span class="ident">Call</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_call</span>),
         <span class="ident">Action</span>::<span class="ident">ReturnValidationResult</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_return_validation_result</span>),
+        <span class="ident">Action</span>::<span class="ident">ReturnValidationPackage</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_return_validation_package</span>),
         <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
     }
 }
@@ -1098,7 +1119,7 @@
     <span class="kw">match</span> <span class="ident">res</span> {
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ExecuteZomeFnResponse</span>::<span class="ident">new</span>(
             <span class="ident">zome_call</span>.<span class="ident">clone</span>(),
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">e</span>)),
+            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">e</span>)),
         )),
         <span class="prelude-val">Ok</span>(<span class="ident">cap</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">cap</span>.<span class="ident">clone</span>()),
     }
@@ -1288,11 +1309,8 @@
         <span class="kw">let</span> <span class="ident">zome_call</span> <span class="op">=</span> <span class="ident">ZomeFnCall</span>::<span class="ident">new</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;main&quot;</span>, <span class="string">&quot;&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">call_and_wait_for_result</span>(<span class="ident">zome_call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">instance</span>);
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="comment">// Result 1337 from WASM (as string)</span>
-            <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">val</span>, <span class="string">&quot;1337&quot;</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">err</span>, <span class="ident">HolochainError</span>::<span class="ident">InstanceActive</span>),
-        }
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;1337&quot;</span>, <span class="ident">result</span>.<span class="ident">unwrap</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1338,7 +1356,7 @@
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">call_and_wait_for_result</span>(<span class="ident">call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">instance</span>);
 
         <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeFunctionNotFound</span>(<span class="ident">err</span>))) <span class="op">=&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeFunctionNotFound</span>(<span class="ident">err</span>))) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">err</span>, <span class="string">&quot;Zome function \&#39;xxx\&#39; not found&quot;</span>)
             }
             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
@@ -1357,9 +1375,7 @@
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">call_and_wait_for_result</span>(<span class="ident">call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">instance</span>);
 
         <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">err</span>)) <span class="op">=&gt;</span> {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">description</span>(), <span class="string">&quot;Zome &#39;xxx&#39; not found&quot;</span>)
-            }
+            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">err</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">description</span>(), <span class="string">&quot;Zome &#39;xxx&#39; not found&quot;</span>),
             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
         }
 
@@ -1369,7 +1385,7 @@
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">super</span>::<span class="ident">call_and_wait_for_result</span>(<span class="ident">call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">instance</span>);
 
         <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">err</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">err</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(
                 <span class="ident">err</span>.<span class="ident">description</span>(),
                 <span class="string">&quot;Capability &#39;xxx&#39; not found in Zome &#39;test_zome&#39;&quot;</span>
             ),

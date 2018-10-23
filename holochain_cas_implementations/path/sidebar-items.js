@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["storage_path",""]]});
+initSidebarItems({"fn":[["create_path_if_not_exists",""],["storage_path",""]],"mod":[["tests",""]]});

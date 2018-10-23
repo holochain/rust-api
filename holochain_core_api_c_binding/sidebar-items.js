@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["holochain_call",""],["holochain_new",""],["holochain_start",""],["holochain_stop",""]]});
+initSidebarItems({"fn":[["holochain_call",""],["holochain_load",""],["holochain_new",""],["holochain_start",""],["holochain_stop",""]]});

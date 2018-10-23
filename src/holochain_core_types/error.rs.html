@@ -218,17 +218,13 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="self">self</span>::<span class="ident">HolochainError</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">channel</span>::<span class="ident">oneshot</span>::<span class="ident">Canceled</span> <span class="kw">as</span> <span class="ident">FutureCanceled</span>;
 <span class="kw">use</span> <span class="ident">json</span>::<span class="ident">ToJson</span>;
 <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">SerdeError</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">error</span>::<span class="ident">Error</span>,
-    <span class="ident">fmt</span>,
-    <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">IoError</span>},
+    <span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">fmt</span>, <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">IoError</span>},
 };
 
 <span class="doccomment">/// Enum holding all Holochain specific errors</span>

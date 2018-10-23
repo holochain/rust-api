@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["dht_reducers","all DHT reducers"],["dht_store",""]]});
+initSidebarItems({"mod":[["actions",""],["dht_reducers","all DHT reducers"],["dht_store",""]]});

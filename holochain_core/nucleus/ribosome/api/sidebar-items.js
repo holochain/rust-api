@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ZomeApiFunction","Enumeration of all the Zome Functions known and usable in Zomes. Enumeration can convert to str."]],"mod":[["call",""],["commit",""],["debug",""],["get_entry",""],["get_links",""],["init_globals",""]]});
+initSidebarItems({"enum":[["ZomeApiFunction","Enumeration of all the Zome Functions known and usable in Zomes. Enumeration can convert to str."]],"mod":[["call",""],["commit",""],["debug",""],["get_entry",""],["get_links",""],["init_globals",""],["link_entries",""]]});

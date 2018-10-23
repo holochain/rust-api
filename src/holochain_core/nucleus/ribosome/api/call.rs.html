@@ -617,7 +617,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_call_no_zome</span>() {
         <span class="kw">let</span> <span class="ident">dna</span> <span class="op">=</span> <span class="ident">test_utils</span>::<span class="ident">create_test_dna_with_wat</span>(<span class="string">&quot;bad_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="prelude-val">None</span>);
-        <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">DnaError</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeNotFound</span>(
+        <span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">Dna</span>(<span class="ident">DnaError</span>::<span class="ident">ZomeNotFound</span>(
             <span class="string">r#&quot;Zome &#39;test_zome&#39; not found&quot;#</span>.<span class="ident">to_string</span>(),
         ))));
         <span class="ident">test_reduce_call</span>(<span class="ident">dna</span>, <span class="ident">expected</span>);

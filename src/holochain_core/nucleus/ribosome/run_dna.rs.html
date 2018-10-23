@@ -173,14 +173,12 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
-<span id="176">176</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">context</span>::<span class="ident">Context</span>;
-<span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::{<span class="ident">HcResult</span>, <span class="ident">HolochainError</span>};
-<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::{
-    <span class="ident">error</span>::{<span class="ident">RibosomeErrorCode</span>, <span class="ident">RibosomeReturnCode</span>},
-    <span class="ident">memory_allocation</span>::<span class="ident">decode_encoded_allocation</span>,
+<span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::{
+    <span class="ident">HcResult</span>, <span class="ident">HolochainError</span>, <span class="ident">RibosomeErrorCode</span>, <span class="ident">RibosomeReturnCode</span>,
 };
+<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::<span class="ident">memory_allocation</span>::<span class="ident">decode_encoded_allocation</span>;
 <span class="kw">use</span> <span class="ident">nucleus</span>::{
     <span class="ident">ribosome</span>::{<span class="ident">api</span>::<span class="ident">ZomeApiFunction</span>, <span class="ident">memory</span>::<span class="ident">SinglePageManager</span>, <span class="ident">Runtime</span>},
     <span class="ident">ZomeFnCall</span>, <span class="ident">ZomeFnResult</span>,

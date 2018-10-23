@@ -225,8 +225,6 @@
 <span id="225">225</span>
 <span id="226">226</span>
 <span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
 </pre><pre class="rust ">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_agent</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">holochain_cas_implementations</span>;
@@ -238,10 +236,8 @@
 
 <span class="kw">use</span> <span class="ident">holochain_agent</span>::<span class="ident">Agent</span>;
 <span class="kw">use</span> <span class="ident">holochain_cas_implementations</span>::{<span class="ident">cas</span>::<span class="ident">file</span>::<span class="ident">FilesystemStorage</span>, <span class="ident">eav</span>::<span class="ident">file</span>::<span class="ident">EavFileStorage</span>};
-<span class="kw">use</span> <span class="ident">holochain_core</span>::{
-    <span class="ident">context</span>::<span class="ident">Context</span>, <span class="ident">logger</span>::<span class="ident">Logger</span>, <span class="ident">nucleus</span>::<span class="ident">ZomeFnResult</span>, <span class="ident">persister</span>::<span class="ident">SimplePersister</span>,
-};
-<span class="kw">use</span> <span class="ident">holochain_core_api</span>::<span class="ident">Holochain</span>;
+<span class="kw">use</span> <span class="ident">holochain_core</span>::{<span class="ident">context</span>::<span class="ident">Context</span>, <span class="ident">logger</span>::<span class="ident">Logger</span>, <span class="ident">persister</span>::<span class="ident">SimplePersister</span>};
+<span class="kw">use</span> <span class="ident">holochain_core_api</span>::{<span class="ident">error</span>::<span class="ident">HolochainResult</span>, <span class="ident">Holochain</span>};
 <span class="kw">use</span> <span class="ident">holochain_dna</span>::{
     <span class="ident">wasm</span>::<span class="ident">DnaWasm</span>,
     <span class="ident">zome</span>::{
@@ -427,7 +423,7 @@
 
 <span class="comment">// Function called at start of all unit tests:</span>
 <span class="comment">//   Startup holochain and do a call on the specified wasm function.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hc_setup_and_call_zome_fn</span>(<span class="ident">wasm_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">ZomeFnResult</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hc_setup_and_call_zome_fn</span>(<span class="ident">wasm_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">HolochainResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="comment">// Setup the holochain instance</span>
     <span class="kw">let</span> <span class="ident">wasm</span> <span class="op">=</span> <span class="ident">create_wasm_from_file</span>(<span class="ident">wasm_path</span>);
     <span class="kw">let</span> <span class="ident">capability</span> <span class="op">=</span> <span class="ident">create_test_cap_with_fn_name</span>(<span class="ident">fn_name</span>);

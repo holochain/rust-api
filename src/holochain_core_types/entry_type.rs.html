@@ -220,18 +220,18 @@
 }
 
 <span class="kw">impl</span> <span class="ident">EntryType</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_app</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_app</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">EntryType</span>::<span class="ident">App</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         }
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_sys</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_sys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">is_app</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_publish</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span> <span class="op">!=</span> <span class="ident">EntryType</span>::<span class="ident">Dna</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_publish</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">!=</span> <span class="ident">EntryType</span>::<span class="ident">Dna</span>
     }
 
     <span class="doccomment">/// Checks entry_type_name is valid</span>

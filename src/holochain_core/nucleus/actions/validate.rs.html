@@ -121,9 +121,8 @@
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">future</span>, <span class="ident">Async</span>, <span class="ident">Future</span>};
 <span class="kw">use</span> <span class="ident">holochain_core_types</span>::{
     <span class="ident">cas</span>::<span class="ident">content</span>::<span class="ident">AddressableContent</span>, <span class="ident">entry</span>::<span class="ident">Entry</span>, <span class="ident">entry_type</span>::<span class="ident">EntryType</span>, <span class="ident">error</span>::<span class="ident">HolochainError</span>,
-    <span class="ident">hash</span>::<span class="ident">HashString</span>,
+    <span class="ident">hash</span>::<span class="ident">HashString</span>, <span class="ident">validation</span>::<span class="ident">ValidationData</span>,
 };
-<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::<span class="ident">api_serialization</span>::<span class="ident">validation</span>::<span class="ident">ValidationData</span>;
 <span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::<span class="ident">callback</span>::{<span class="self">self</span>, <span class="ident">CallbackResult</span>};
 <span class="kw">use</span> <span class="ident">snowflake</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">sync</span>::<span class="ident">Arc</span>, <span class="ident">thread</span>};
@@ -177,6 +176,7 @@
                             <span class="string">&quot;Validation callback not implemented for {:?}&quot;</span>,
                             <span class="ident">entry_type</span>.<span class="ident">clone</span>()
                         )),
+                        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
                     },
                     <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>.<span class="ident">to_string</span>()),
                 };

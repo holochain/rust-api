@@ -32,21 +32,23 @@
 <span id="32">32</span>
 <span id="33">33</span>
 <span id="34">34</span>
+<span id="35">35</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! File for holding all internal/private globals used by the zome api library</span>
+<span class="doccomment">//! Holds the internal/private globals used by the zome api library.</span>
+<span class="doccomment">//! Also contains the functions declarations of the external functions provided by the Ribosome.</span>
 
-<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::<span class="ident">memory_allocation</span>::<span class="ident">SinglePageStack</span>;
-<span class="kw">use</span> <span class="ident">init_globals</span>::{<span class="ident">init_globals</span>, <span class="ident">AppGlobals</span>};
+<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::{<span class="ident">api_serialization</span>::<span class="ident">ZomeApiGlobals</span>, <span class="ident">memory_allocation</span>::<span class="ident">SinglePageStack</span>};
+<span class="kw">use</span> <span class="ident">init_globals</span>::<span class="ident">init_globals</span>;
 
 <span class="comment">// Internal global for memory usage</span>
 <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">G_MEM_STACK</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SinglePageStack</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-<span class="comment">// Internal global for retrieving all app globals</span>
+<span class="comment">// Internal global for retrieving all Zome API globals</span>
 <span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">APP_GLOBALS</span>: <span class="ident">AppGlobals</span> <span class="op">=</span> <span class="ident">init_globals</span>();
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">GLOBALS</span>: <span class="ident">ZomeApiGlobals</span> <span class="op">=</span> <span class="ident">init_globals</span>();
 }
 
-<span class="comment">// Invokable functions in the ribosome</span>
+<span class="comment">// Invokable functions in the Ribosome</span>
 <span class="comment">// WARNING Names must be in sync with ZomeAPIFunction in holochain-rust</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {

@@ -533,11 +533,9 @@
 <span id="533">533</span>
 <span id="534">534</span>
 <span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! holochain_core_api provides a library for container applications to instantiate and run holochain applications.</span>
+<span class="doccomment">//! `holochain_core_api` is a library for instantiating and using a holochain instance that</span>
+<span class="doccomment">//! runs a holochain DNA, DHT and source chain.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Examples</span>
 <span class="doccomment">//!</span>
@@ -560,7 +558,7 @@
 <span class="doccomment">//! };</span>
 <span class="doccomment">//! use tempfile::tempdir;</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // instantiate a new app</span>
+<span class="doccomment">//! // instantiate a new holochain instance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! // need to get to something like this:</span>
 <span class="doccomment">//! //let dna = holochain_dna::from_package_file(&quot;mydna.hcpkg&quot;);</span>
@@ -577,10 +575,10 @@
 <span class="doccomment">//!  ).unwrap();</span>
 <span class="doccomment">//! let mut hc = Holochain::new(dna,Arc::new(context)).unwrap();</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // start up the app</span>
-<span class="doccomment">//! hc.start().expect(&quot;couldn&#39;t start the app&quot;);</span>
+<span class="doccomment">//! // start up the holochain instance</span>
+<span class="doccomment">//! hc.start().expect(&quot;couldn&#39;t start the holochain instance&quot;);</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // call a function in the app</span>
+<span class="doccomment">//! // call a function in the zome code</span>
 <span class="doccomment">//! hc.call(&quot;test_zome&quot;,&quot;test_cap&quot;,&quot;some_fn&quot;,&quot;{}&quot;);</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! // get the state</span>
@@ -591,8 +589,8 @@
 <span class="doccomment">//!     // ...</span>
 <span class="doccomment">//! }</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // stop the app</span>
-<span class="doccomment">//! hc.stop().expect(&quot;couldn&#39;t stop the app&quot;);</span>
+<span class="doccomment">//! // stop the holochain instance</span>
+<span class="doccomment">//! hc.stop().expect(&quot;couldn&#39;t stop the holochain instance&quot;);</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!```</span>
 
@@ -605,6 +603,9 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">test_utils</span>;
 
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
+
+<span class="kw">use</span> <span class="ident">error</span>::{<span class="ident">HolochainInstanceError</span>, <span class="ident">HolochainResult</span>};
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">executor</span>::<span class="ident">block_on</span>;
 <span class="kw">use</span> <span class="ident">holochain_core</span>::{
     <span class="ident">context</span>::<span class="ident">Context</span>,
@@ -626,7 +627,7 @@
 
 <span class="kw">impl</span> <span class="ident">Holochain</span> {
     <span class="doccomment">/// create a new Holochain instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">dna</span>: <span class="ident">Dna</span>, <span class="ident">context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">dna</span>: <span class="ident">Dna</span>, <span class="ident">context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">HolochainResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">instance</span> <span class="op">=</span> <span class="ident">Instance</span>::<span class="ident">new</span>(<span class="ident">context</span>.<span class="ident">clone</span>());
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">dna</span>.<span class="ident">name</span>.<span class="ident">clone</span>();
         <span class="ident">instance</span>.<span class="ident">start_action_loop</span>(<span class="ident">context</span>.<span class="ident">clone</span>());
@@ -634,30 +635,36 @@
         <span class="kw">match</span> <span class="ident">block_on</span>(<span class="ident">initialize_application</span>(<span class="ident">dna</span>, <span class="ident">context</span>.<span class="ident">clone</span>())) {
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
                 <span class="ident">context</span>.<span class="ident">log</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} instantiated&quot;</span>, <span class="ident">name</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">Holochain</span> {
+                <span class="kw">let</span> <span class="ident">hc</span> <span class="op">=</span> <span class="ident">Holochain</span> {
                     <span class="ident">instance</span>,
                     <span class="ident">context</span>,
                     <span class="ident">active</span>: <span class="bool-val">false</span>,
                 };
-                <span class="prelude-val">Ok</span>(<span class="ident">app</span>)
+                <span class="prelude-val">Ok</span>(<span class="ident">hc</span>)
             }
-            <span class="prelude-val">Err</span>(<span class="ident">initialization_error</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(<span class="ident">initialization_error</span>)),
+            <span class="prelude-val">Err</span>(<span class="ident">err_str</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainInstanceError</span>::<span class="ident">InternalFailure</span>(
+                <span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(<span class="ident">err_str</span>),
+            )),
         }
     }
 
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">load</span>(<span class="ident">_path</span>: <span class="ident">String</span>, <span class="ident">_context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">NotImplemented</span>)
+    }
+
     <span class="doccomment">/// activate the Holochain instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HolochainInstanceError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">active</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">InstanceActive</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceAlreadyActive</span>);
         }
         <span class="self">self</span>.<span class="ident">active</span> <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// deactivate the Holochain instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HolochainInstanceError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">active</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">InstanceNotActive</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceNotActiveYet</span>);
         }
         <span class="self">self</span>.<span class="ident">active</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="prelude-val">Ok</span>(())
@@ -670,14 +677,12 @@
         <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">HolochainResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">active</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">InstanceNotActive</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceNotActiveYet</span>);
         }
-
         <span class="kw">let</span> <span class="ident">zome_call</span> <span class="op">=</span> <span class="ident">ZomeFnCall</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">zome</span>, <span class="kw-2">&amp;</span><span class="ident">cap</span>, <span class="kw-2">&amp;</span><span class="ident">fn_name</span>, <span class="kw-2">&amp;</span><span class="ident">params</span>);
-
-        <span class="ident">call_and_wait_for_result</span>(<span class="ident">zome_call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">instance</span>)
+        <span class="prelude-val">Ok</span>(<span class="ident">call_and_wait_for_result</span>(<span class="ident">zome_call</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">instance</span>)<span class="question-mark">?</span>)
     }
 
     <span class="doccomment">/// checks to see if an instance is active</span>
@@ -686,7 +691,7 @@
     }
 
     <span class="doccomment">/// return</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">state</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">State</span>, <span class="ident">HolochainError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">state</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">State</span>, <span class="ident">HolochainInstanceError</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">instance</span>.<span class="ident">state</span>().<span class="ident">clone</span>())
     }
 }
@@ -742,17 +747,15 @@
         <span class="kw">let</span> (<span class="ident">context</span>, <span class="ident">test_logger</span>) <span class="op">=</span> <span class="ident">test_context</span>(<span class="string">&quot;bob&quot;</span>);
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Holochain</span>::<span class="ident">new</span>(<span class="ident">dna</span>.<span class="ident">clone</span>(), <span class="ident">context</span>.<span class="ident">clone</span>());
 
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">hc</span>) <span class="op">=&gt;</span> {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">instance</span>.<span class="ident">state</span>().<span class="ident">nucleus</span>().<span class="ident">dna</span>(), <span class="prelude-val">Some</span>(<span class="ident">dna</span>));
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">hc</span>.<span class="ident">active</span>);
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">context</span>.<span class="ident">agent</span>.<span class="ident">to_string</span>(), <span class="string">&quot;bob&quot;</span>.<span class="ident">to_string</span>());
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">instance</span>.<span class="ident">state</span>().<span class="ident">nucleus</span>().<span class="ident">has_initialized</span>());
-                <span class="kw">let</span> <span class="ident">test_logger</span> <span class="op">=</span> <span class="ident">test_logger</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">*</span><span class="ident">test_logger</span>), <span class="string">&quot;[\&quot;TestApp instantiated\&quot;]&quot;</span>);
-            }
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        };
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
+        <span class="kw">let</span> <span class="ident">hc</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">instance</span>.<span class="ident">state</span>().<span class="ident">nucleus</span>().<span class="ident">dna</span>(), <span class="prelude-val">Some</span>(<span class="ident">dna</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">hc</span>.<span class="ident">active</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">context</span>.<span class="ident">agent</span>.<span class="ident">to_string</span>(), <span class="string">&quot;bob&quot;</span>.<span class="ident">to_string</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">instance</span>.<span class="ident">state</span>().<span class="ident">nucleus</span>().<span class="ident">has_initialized</span>());
+        <span class="kw">let</span> <span class="ident">test_logger</span> <span class="op">=</span> <span class="ident">test_logger</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">*</span><span class="ident">test_logger</span>), <span class="string">&quot;[\&quot;TestApp instantiated\&quot;]&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -778,11 +781,11 @@
 
         <span class="kw">let</span> (<span class="ident">context</span>, <span class="ident">_test_logger</span>) <span class="op">=</span> <span class="ident">test_context</span>(<span class="string">&quot;bob&quot;</span>);
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Holochain</span>::<span class="ident">new</span>(<span class="ident">dna</span>.<span class="ident">clone</span>(), <span class="ident">context</span>.<span class="ident">clone</span>());
-
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">err</span>, <span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(<span class="string">&quot;fail&quot;</span>.<span class="ident">to_string</span>())),
-        };
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">HolochainInstanceError</span>::<span class="ident">from</span>(<span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(<span class="string">&quot;fail&quot;</span>.<span class="ident">to_string</span>())),
+            <span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(),
+        );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -806,14 +809,13 @@
 
         <span class="kw">let</span> (<span class="ident">context</span>, <span class="ident">_test_logger</span>) <span class="op">=</span> <span class="ident">test_context</span>(<span class="string">&quot;bob&quot;</span>);
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Holochain</span>::<span class="ident">new</span>(<span class="ident">dna</span>.<span class="ident">clone</span>(), <span class="ident">context</span>.<span class="ident">clone</span>());
-
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">err</span>,
-                <span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(<span class="string">&quot;Timeout while initializing&quot;</span>.<span class="ident">to_string</span>())
-            ),
-        };
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">HolochainInstanceError</span>::<span class="ident">from</span>(<span class="ident">HolochainError</span>::<span class="ident">ErrorGeneric</span>(
+                <span class="string">&quot;Timeout while initializing&quot;</span>.<span class="ident">to_string</span>()
+            )),
+            <span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(),
+        );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -825,32 +827,25 @@
 
         <span class="comment">// stop when not active returns error</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">stop</span>();
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">InstanceNotActive</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">true</span>),
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        }
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceNotActiveYet</span>,
+            <span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>()
+        );
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">start</span>();
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">true</span>),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        }
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">active</span>());
 
         <span class="comment">// start when active returns error</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">start</span>();
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">InstanceActive</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">true</span>),
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        }
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceAlreadyActive</span>,
+            <span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>()
+        );
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">stop</span>();
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">true</span>),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        }
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">hc</span>.<span class="ident">active</span>());
     }
 
@@ -875,7 +870,10 @@
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;main&quot;</span>, <span class="string">&quot;&quot;</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(), <span class="ident">HolochainError</span>::<span class="ident">InstanceNotActive</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">result</span>.<span class="ident">err</span>().<span class="ident">unwrap</span>(),
+            <span class="ident">HolochainInstanceError</span>::<span class="ident">InstanceNotActiveYet</span>
+        );
 
         <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
 
@@ -892,12 +890,8 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hc</span> <span class="op">=</span> <span class="ident">Holochain</span>::<span class="ident">new</span>(<span class="ident">dna</span>.<span class="ident">clone</span>(), <span class="ident">context</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">state</span>();
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">state</span>) <span class="op">=&gt;</span> {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">state</span>.<span class="ident">nucleus</span>().<span class="ident">dna</span>(), <span class="prelude-val">Some</span>(<span class="ident">dna</span>));
-            }
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="bool-val">false</span>),
-        };
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">unwrap</span>().<span class="ident">nucleus</span>().<span class="ident">dna</span>(), <span class="prelude-val">Some</span>(<span class="ident">dna</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -957,7 +951,7 @@
         <span class="comment">// Check in holochain instance&#39;s history that the commit event has been processed</span>
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">6</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">7</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

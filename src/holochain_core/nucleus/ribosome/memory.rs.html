@@ -89,13 +89,9 @@
 <span id="89">89</span>
 <span id="90">90</span>
 <span id="91">91</span>
-<span id="92">92</span>
-<span id="93">93</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::{
-    <span class="ident">error</span>::<span class="ident">RibosomeErrorCode</span>,
-    <span class="ident">memory_allocation</span>::{<span class="ident">SinglePageAllocation</span>, <span class="ident">SinglePageStack</span>, <span class="ident">U16_MAX</span>},
-};
+<span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::<span class="ident">RibosomeErrorCode</span>;
+<span class="kw">use</span> <span class="ident">holochain_wasm_utils</span>::<span class="ident">memory_allocation</span>::{<span class="ident">SinglePageAllocation</span>, <span class="ident">SinglePageStack</span>, <span class="ident">U16_MAX</span>};
 
 <span class="kw">use</span> <span class="ident">wasmi</span>::{<span class="ident">MemoryRef</span>, <span class="ident">ModuleRef</span>};
 

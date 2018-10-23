@@ -355,7 +355,7 @@
 <span id="355">355</span>
 <span id="356">356</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">error</span>::{<span class="ident">RibosomeErrorCode</span>, <span class="ident">RibosomeReturnCode</span>};
+<span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::{<span class="ident">RibosomeErrorCode</span>, <span class="ident">RibosomeReturnCode</span>};
 
 <span class="comment">//--------------------------------------------------------------------------------------------------</span>
 <span class="comment">// Helpers</span>
@@ -507,7 +507,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tests</span> {
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">RibosomeReturnCode</span>;
+    <span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::<span class="ident">RibosomeReturnCode</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_single_page_allocation</span>() <span class="op">-&gt;</span> <span class="ident">SinglePageAllocation</span> {
         <span class="ident">SinglePageAllocation</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">20</span>).<span class="ident">expect</span>(<span class="string">&quot;could not create test SinglePageAllocation&quot;</span>)

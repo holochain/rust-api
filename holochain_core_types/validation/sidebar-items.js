@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["HcEntryAction",""],["HcEntryLifecycle",""],["HcLinkAction",""]],"struct":[["ValidationData",""]]});
+initSidebarItems({"enum":[["EntryAction",""],["EntryLifecycle",""],["LinkAction",""],["ValidationPackageDefinition",""]],"struct":[["ValidationData",""],["ValidationPackage",""]]});

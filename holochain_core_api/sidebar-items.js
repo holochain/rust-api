@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Holochain","contains a Holochain application instance"]]});
+initSidebarItems({"mod":[["error",""]],"struct":[["Holochain","contains a Holochain application instance"]]});
