@@ -132,140 +132,152 @@
 <span id="132">132</span>
 <span id="133">133</span>
 <span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
 </pre><pre class="rust ">
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">load_json</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoded_allocation_of_input</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {{
         <span class="kw">let</span> <span class="ident">maybe_input</span> <span class="op">=</span>
-            ::<span class="ident">hdk</span>::<span class="ident">holochain_wasm_utils</span>::<span class="ident">memory_serialization</span>::<span class="ident">load_json</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoded_allocation_of_input</span>);
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span> <span class="ident">maybe_input</span> {
-            <span class="kw">return</span> ::<span class="ident">hdk</span>::<span class="ident">holochain_wasm_utils</span>::<span class="ident">holochain_core_types</span>::<span class="ident">error</span>::<span class="ident">RibosomeErrorCode</span>::<span class="ident">ArgumentDeserializationFailed</span>
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">holochain_wasm_utils</span>::<span class="ident">memory_serialization</span>::<span class="ident">load_json</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoded_allocation_of_input</span>);
+        <span class="kw">if</span> <span class="ident">maybe_input</span>.<span class="ident">is_err</span>() {
+            <span class="kw">return</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">holochain_wasm_utils</span>::<span class="ident">holochain_core_types</span>::<span class="ident">error</span>::<span class="ident">RibosomeErrorCode</span>::<span class="ident">ArgumentDeserializationFailed</span>
                 <span class="kw">as</span> <span class="ident">u32</span>;
         }
         <span class="ident">maybe_input</span>
     }};
 }
 
-<span class="doccomment">/// A macro for easily writing zome functions</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #[macro_use] extern crate hdk;</span>
-<span class="doccomment">/// # extern crate holochain_wasm_utils;</span>
-<span class="doccomment">/// # extern crate serde;</span>
-<span class="doccomment">/// # extern crate serde_json;</span>
-<span class="doccomment">/// # #[macro_use] extern crate serde_derive;</span>
-<span class="doccomment">/// # use hdk::globals::G_MEM_STACK;</span>
-<span class="doccomment">/// # use holochain_wasm_utils::holochain_core_types::error::RibosomeReturnCode;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # // Adding empty hc_init_globals() so that the cfg(test) build can link.</span>
-<span class="doccomment">/// # #[no_mangle]</span>
-<span class="doccomment">/// # pub fn hc_init_globals(_: u32) -&gt; u32 { 0 }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # fn main() {</span>
-<span class="doccomment">/// #[derive(Serialize)]</span>
-<span class="doccomment">/// struct CreatePostResponse {</span>
-<span class="doccomment">///     author: String,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// zome_functions! {</span>
-<span class="doccomment">///     create_post: |author: String, content: String| {</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///         // ..snip..</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///         CreatePostResponse { author: author }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// A macro for describing zomes</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">zome_functions</span> {
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">define_zome</span> {
     (
-        $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">func_name</span>:<span class="ident">ident</span> : <span class="op">|</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">param</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span>:<span class="ident">ty</span>),<span class="op">*</span> <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">main_block</span>:<span class="ident">expr</span>)<span class="op">+</span>
-    ) <span class="op">=&gt;</span> (
+        <span class="ident">entries</span> : [
+            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry_expr</span>:<span class="ident">expr</span> ),<span class="op">*</span>
+        ]
+
+        <span class="ident">genesis</span> : <span class="op">||</span> {
+            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">genesis_expr</span>:<span class="ident">expr</span>
+        }
+
+        <span class="ident">functions</span> : {
+            $(
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cap</span>:<span class="ident">ident</span> ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">vis</span>:<span class="ident">ident</span> ) {
+                    $(
+                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">zome_function_name</span>:<span class="ident">ident</span> : {
+                            <span class="ident">inputs</span>: <span class="op">|</span> $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_type</span>:<span class="ident">ty</span> ),<span class="op">*</span> <span class="op">|</span>,
+                            <span class="ident">outputs</span>: <span class="op">|</span> $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">output_param_name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">output_param_type</span>:<span class="ident">ty</span> ),<span class="op">*</span> <span class="op">|</span>,
+                            <span class="ident">handler</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">handler_path</span>:<span class="ident">path</span>
+                        }
+                    )<span class="op">+</span>
+                }
+            )<span class="op">*</span>
+        }
+
+    ) <span class="op">=&gt;</span> {
+        <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">zome_setup</span>(<span class="ident">zd</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">meta</span>::<span class="ident">ZomeDefinition</span>) {
+            $(
+                <span class="ident">zd</span>.<span class="ident">define</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry_expr</span>);
+            )<span class="op">*</span>
+        }
+
+        <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+        <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">genesis</span>(<span class="ident">encoded_allocation_of_input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">init_global_memory</span>(<span class="ident">encoded_allocation_of_input</span>);
+
+            <span class="kw">fn</span> <span class="ident">execute</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">String</span><span class="op">&gt;</span> {
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">genesis_expr</span>
+            }
+
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">store_and_return_output</span>(<span class="ident">execute</span>())
+        }
+
+        <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">list_capabilities</span>(<span class="ident">encoded_allocation_of_input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">init_global_memory</span>(<span class="ident">encoded_allocation_of_input</span>);
+
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">holochain_dna</span>::<span class="ident">zome</span>::<span class="ident">capabilities</span>::{<span class="ident">Capability</span>, <span class="ident">Membrane</span>, <span class="ident">CapabilityType</span>, <span class="ident">FnParameter</span>, <span class="ident">FnDeclaration</span>};
+            <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
+
+            <span class="kw">let</span> <span class="ident">return_value</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Capability</span><span class="op">&gt;</span> <span class="op">=</span> {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cap_map</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
+
+                $(
+                    {
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">capability</span> <span class="op">=</span> <span class="ident">Capability</span>::<span class="ident">new</span>();
+                        <span class="ident">capability</span>.<span class="ident">cap_type</span> <span class="op">=</span> <span class="ident">CapabilityType</span> { <span class="ident">membrane</span>: <span class="ident">Membrane</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vis</span> };
+                        <span class="ident">capability</span>.<span class="ident">functions</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+                            $(
+                                <span class="ident">FnDeclaration</span> {
+                                    <span class="ident">name</span>: <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">zome_function_name</span>).<span class="ident">into</span>(),
+                                    <span class="ident">inputs</span>: <span class="macro">vec</span><span class="macro">!</span>[
+                                        $(
+                                            <span class="ident">FnParameter</span>::<span class="ident">new</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_name</span>), <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_type</span>))
+                                        ),<span class="op">*</span>
+                                    ],
+                                    <span class="ident">outputs</span>: <span class="macro">vec</span><span class="macro">!</span>[
+                                        $(
+                                            <span class="ident">FnParameter</span>::<span class="ident">new</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output_param_name</span>), <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">output_param_type</span>))
+                                        ),<span class="op">*</span>
+                                    ]
+                                }
+
+                            ),<span class="op">+</span>
+                        ];
+
+                        <span class="ident">cap_map</span>.<span class="ident">insert</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cap</span>).<span class="ident">into</span>(), <span class="ident">capability</span>);
+                    }
+                ),<span class="op">*</span>
+
+                <span class="ident">cap_map</span>
+            };
+
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">store_and_return_output</span>(<span class="ident">return_value</span>)
+        }
 
         $(
-            <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-            <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">func_name</span>(<span class="ident">encoded_allocation_of_input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+            $(
+                <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+                <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">zome_function_name</span>(<span class="ident">encoded_allocation_of_input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">init_global_memory</span>(<span class="ident">encoded_allocation_of_input</span>);
 
-                ::<span class="ident">hdk</span>::<span class="ident">global_fns</span>::<span class="ident">init_global_memory</span>(<span class="ident">encoded_allocation_of_input</span>);
+                    <span class="comment">// Macro&#39;d InputStruct</span>
+                    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
+                    <span class="kw">struct</span> <span class="ident">InputStruct</span> {
+                        $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_name</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_type</span>),<span class="op">*</span>
+                    }
 
-                <span class="comment">// Macro&#39;d InputStruct</span>
-                <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-                <span class="kw">struct</span> <span class="ident">InputStruct</span> {
-                    $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">param</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span>),<span class="op">*</span>
+                    <span class="comment">// #[derive(Serialize)]</span>
+                    <span class="comment">// struct OutputStruct {</span>
+                    <span class="comment">//     $( $output_param_name:ident : $output_param_type:ty ),*</span>
+                    <span class="comment">// }</span>
+
+                    <span class="comment">// Deserialize input</span>
+                    <span class="kw">let</span> <span class="ident">maybe_input</span> <span class="op">=</span> <span class="macro">load_json</span><span class="macro">!</span>(<span class="ident">encoded_allocation_of_input</span>);
+                    <span class="kw">let</span> <span class="ident">input</span>: <span class="ident">InputStruct</span> <span class="op">=</span> <span class="ident">maybe_input</span>.<span class="ident">unwrap</span>();
+
+                    <span class="comment">// Macro&#39;d function body</span>
+                    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="ident">params</span>: <span class="ident">InputStruct</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> ::<span class="ident">serde</span>::<span class="ident">Serialize</span> {
+                        <span class="kw">let</span> <span class="ident">InputStruct</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_name</span>),<span class="op">*</span> } <span class="op">=</span> <span class="ident">params</span>;
+
+                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">handler_path</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input_param_name</span>),<span class="kw-2">*</span>)
+                    }
+
+                    <span class="comment">// Execute inner function</span>
+                    <span class="kw">let</span> <span class="ident">output_obj</span> <span class="op">=</span> <span class="ident">execute</span>(<span class="ident">input</span>);
+
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">global_fns</span>::<span class="ident">store_and_return_output</span>(<span class="ident">output_obj</span>)
                 }
-
-                <span class="comment">// Deserialize input</span>
-                <span class="kw">let</span> <span class="ident">maybe_input</span> <span class="op">=</span> <span class="macro">load_json</span><span class="macro">!</span>(<span class="ident">encoded_allocation_of_input</span>);
-                <span class="kw">let</span> <span class="ident">input</span>: <span class="ident">InputStruct</span> <span class="op">=</span> <span class="ident">maybe_input</span>.<span class="ident">unwrap</span>();
-
-                <span class="comment">// Macro&#39;d function body</span>
-                <span class="kw">fn</span> <span class="ident">execute</span>(<span class="ident">params</span>: <span class="ident">InputStruct</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> ::<span class="ident">serde</span>::<span class="ident">Serialize</span> {
-                    <span class="kw">let</span> <span class="ident">InputStruct</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">param</span>),<span class="op">*</span> } <span class="op">=</span> <span class="ident">params</span>;
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">main_block</span>
-                }
-
-                <span class="comment">// Execute inner function</span>
-                <span class="kw">let</span> <span class="ident">output_obj</span> <span class="op">=</span> <span class="ident">execute</span>(<span class="ident">input</span>);
-
-                ::<span class="ident">hdk</span>::<span class="ident">global_fns</span>::<span class="ident">store_and_return_output</span>(<span class="ident">output_obj</span>)
-            }
-        )<span class="op">+</span>
-    );
-}
-
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">validations</span> {
-    (
-        $([<span class="ident">ENTRY</span>] <span class="macro-nonterminal">$</span><span class="macro-nonterminal">func_name</span>:<span class="ident">ident</span> {
-            <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ctx</span>:<span class="ident">ident</span> : <span class="ident">hdk</span>::<span class="ident">ValidationData</span> <span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">main_block</span>:<span class="ident">expr</span>
-        })<span class="op">+</span>
-    ) <span class="op">=&gt;</span> (
-
-        $(
-            <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-            <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">func_name</span>(<span class="ident">encoded_allocation_of_input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
-
-                ::<span class="ident">hdk</span>::<span class="ident">global_fns</span>::<span class="ident">init_global_memory</span>(<span class="ident">encoded_allocation_of_input</span>);
-
-                <span class="comment">// Macro&#39;d InputStruct</span>
-                <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-                <span class="kw">struct</span> <span class="ident">InputStruct</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry_type</span>,
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ctx</span> : ::<span class="ident">hdk</span>::<span class="ident">ValidationData</span>,
-                }
-
-                <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
-                <span class="kw">struct</span> <span class="ident">InputStructGeneric</span> {
-                    <span class="ident">entry</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry_type</span>,
-                    <span class="ident">ctx</span> : ::<span class="ident">hdk</span>::<span class="ident">ValidationData</span>,
-                }
-
-                <span class="comment">// Deserialize input</span>
-                <span class="kw">let</span> <span class="ident">maybe_input</span> <span class="op">=</span> <span class="macro">load_json</span><span class="macro">!</span>(<span class="ident">encoded_allocation_of_input</span>);
-                <span class="kw">let</span> <span class="ident">input_generic</span>: <span class="ident">InputStructGeneric</span> <span class="op">=</span> <span class="ident">maybe_input</span>.<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">InputStruct</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>: <span class="ident">input_generic</span>.<span class="ident">entry</span>,
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ctx</span>: <span class="ident">input_generic</span>.<span class="ident">ctx</span>,
-                };
-
-                <span class="comment">// Macro&#39;d function body</span>
-                <span class="kw">fn</span> <span class="ident">execute</span>(<span class="ident">params</span>: <span class="ident">InputStruct</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">String</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> <span class="ident">InputStruct</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">entry</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ctx</span> } <span class="op">=</span> <span class="ident">params</span>;
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">main_block</span>
-                }
-
-                <span class="comment">// Execute inner function</span>
-                <span class="kw">let</span> <span class="ident">validation_result</span> <span class="op">=</span> <span class="ident">execute</span>(<span class="ident">input</span>);
-                <span class="kw">match</span> <span class="ident">validation_result</span> {
-                    <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="number">0</span>,
-                    <span class="prelude-val">Err</span>(<span class="ident">fail_string</span>) <span class="op">=&gt;</span> ::<span class="ident">hdk</span>::<span class="ident">global_fns</span>::<span class="ident">store_and_return_output</span>(<span class="ident">fail_string</span>),
-                }
-            }
-        )<span class="op">+</span>
-    );
+            )<span class="op">+</span>
+        )<span class="op">*</span>
+    };
 }
 </pre>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "hdk";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

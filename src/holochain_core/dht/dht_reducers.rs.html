@@ -426,7 +426,7 @@
         <span class="ident">Action</span>::<span class="ident">Commit</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_commit_entry</span>),
         <span class="ident">Action</span>::<span class="ident">GetEntry</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_get_entry_from_network</span>),
         <span class="ident">Action</span>::<span class="ident">AddLink</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_add_link</span>),
-        <span class="ident">Action</span>::<span class="ident">GetLinks</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">reduce_get_links</span>),
+        <span class="comment">//Action::GetLinks(_) =&gt; Some(reduce_get_links),</span>
         <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
     }
 }
@@ -600,7 +600,7 @@
     <span class="prelude-val">Some</span>(<span class="ident">new_store</span>)
 }
 
-<span class="comment">//</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reduce_get_links</span><span class="op">&lt;</span><span class="ident">CAS</span>, <span class="ident">EAVS</span><span class="op">&gt;</span>(
     <span class="ident">_context</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Context</span><span class="op">&gt;</span>,
     <span class="ident">_old_store</span>: <span class="kw-2">&amp;</span><span class="ident">DhtStore</span><span class="op">&lt;</span><span class="ident">CAS</span>, <span class="ident">EAVS</span><span class="op">&gt;</span>,

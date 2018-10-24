@@ -50,7 +50,6 @@
 <span id="50">50</span>
 <span id="51">51</span>
 <span id="52">52</span>
-<span id="53">53</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::<span class="ident">Runtime</span>;
 <span class="kw">use</span> <span class="ident">wasmi</span>::{<span class="ident">RuntimeArgs</span>, <span class="ident">RuntimeValue</span>, <span class="ident">Trap</span>};
@@ -92,16 +91,15 @@
         <span class="ident">test_debug_string</span>().<span class="ident">into_bytes</span>()
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="doccomment">/// test that bytes passed to debug end up in the log</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_zome_api_function_debug</span>() {
-        <span class="kw">let</span> (<span class="ident">call_result</span>, <span class="ident">logger</span>) <span class="op">=</span>
+        <span class="kw">let</span> (<span class="ident">call_result</span>, <span class="ident">context</span>) <span class="op">=</span>
             <span class="ident">test_zome_api_function</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">Debug</span>.<span class="ident">as_str</span>(), <span class="ident">test_args_bytes</span>());
-        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">logger</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">call_result</span>.<span class="ident">is_empty</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="string">&quot;[\&quot;zome_log:DEBUG: \\\&#39;foo\\\&#39;\&quot;, \&quot;Zome Function \\\&#39;test\\\&#39; returned: Success\&quot;]&quot;</span>,
-            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">logger</span>.<span class="ident">log</span>),
+            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, (<span class="kw-2">*</span><span class="ident">context</span>.<span class="ident">logger</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>()).<span class="ident">dump</span>()),
         );
     }
 }

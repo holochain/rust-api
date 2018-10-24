@@ -92,7 +92,7 @@
     <span class="ident">Custom</span>(<span class="ident">String</span>), <span class="comment">//sending something custom</span>
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ValidationData</span> {
     <span class="kw">pub</span> <span class="ident">package</span>: <span class="ident">ValidationPackage</span>,
     <span class="kw">pub</span> <span class="ident">sources</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HashString</span><span class="op">&gt;</span>,
@@ -100,21 +100,21 @@
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">EntryAction</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EntryLifecycle</span> {
     <span class="ident">Chain</span>,
     <span class="ident">Dht</span>,
     <span class="ident">Meta</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EntryAction</span> {
     <span class="ident">Commit</span>,
     <span class="ident">Modify</span>,
     <span class="ident">Delete</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LinkAction</span> {
     <span class="ident">Commit</span>,
     <span class="ident">Delete</span>,

@@ -28,6 +28,7 @@
 <span id="28">28</span>
 <span id="29">29</span>
 <span id="30">30</span>
+<span id="31">31</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">holochain_core_types</span>::<span class="ident">error</span>::{<span class="ident">HcResult</span>, <span class="ident">HolochainError</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fs</span>::<span class="ident">DirBuilder</span>, <span class="ident">path</span>::<span class="ident">Path</span>};
@@ -52,6 +53,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">path</span>::<span class="ident">storage_path</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">MAIN_SEPARATOR</span>};
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_storage_path</span>() {
         <span class="kw">let</span> <span class="ident">dummy_path</span> <span class="op">=</span> <span class="ident">storage_path</span>(<span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;foo&quot;</span>), <span class="string">&quot;bar&quot;</span>).<span class="ident">unwrap</span>();

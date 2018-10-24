@@ -193,11 +193,11 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_links</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">_address</span>: <span class="ident">HashString</span>,
-        <span class="ident">_attribute_name</span>: <span class="ident">String</span>,
+        <span class="ident">address</span>: <span class="ident">HashString</span>,
+        <span class="ident">tag</span>: <span class="ident">String</span>,
     ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">EntityAttributeValue</span><span class="op">&gt;</span>, <span class="ident">HolochainError</span><span class="op">&gt;</span> {
-        <span class="comment">// FIXME</span>
-        <span class="prelude-val">Err</span>(<span class="ident">HolochainError</span>::<span class="ident">NotImplemented</span>)
+        <span class="self">self</span>.<span class="ident">meta_storage</span>
+            .<span class="ident">fetch_eav</span>(<span class="prelude-val">Some</span>(<span class="ident">address</span>), <span class="prelude-val">Some</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;link:{}&quot;</span>, <span class="ident">tag</span>)), <span class="prelude-val">None</span>)
     }
 
     <span class="comment">// Getters (for reducers)</span>

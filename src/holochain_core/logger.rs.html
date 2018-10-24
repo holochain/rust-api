@@ -25,6 +25,12 @@
 <span id="25">25</span>
 <span id="26">26</span>
 <span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! This logger is the logger that&#39;s attached to each Holochain application</span>
 <span class="doccomment">//! which is separate from standard logging via the log crate warn! info! debug! logging that</span>
@@ -34,7 +40,13 @@
 
 <span class="doccomment">/// trait that defines the logging functionality that holochain_core requires</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Logger</span>: <span class="ident">Send</span> {
+    <span class="comment">// Add log message to logger</span>
     <span class="kw">fn</span> <span class="ident">log</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">String</span>);
+
+    <span class="comment">// Dump all held logs</span>
+    <span class="kw">fn</span> <span class="ident">dump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+        <span class="ident">String</span>::<span class="ident">new</span>()
+    }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>

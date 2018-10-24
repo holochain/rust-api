@@ -183,7 +183,7 @@
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">block_on</span>(<span class="ident">add_link</span>(<span class="kw-2">&amp;</span><span class="ident">link</span>, <span class="kw-2">&amp;</span><span class="ident">context</span>.<span class="ident">clone</span>()));
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_ok</span>(), <span class="string">&quot;result = {:?}&quot;</span>, <span class="ident">result</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

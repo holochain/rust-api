@@ -141,6 +141,31 @@
 <span id="141">141</span>
 <span id="142">142</span>
 <span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
 </pre><pre class="rust ">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">futures</span>;
 <span class="kw">use</span> <span class="ident">action</span>::{<span class="ident">Action</span>, <span class="ident">ActionWrapper</span>};
@@ -207,6 +232,31 @@
                     .<span class="ident">action_channel</span>
                     .<span class="ident">send</span>(<span class="ident">ActionWrapper</span>::<span class="ident">new</span>(<span class="ident">Action</span>::<span class="ident">ReturnInitializationResult</span>(
                         <span class="prelude-val">Some</span>(<span class="ident">dna_commit</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>()).<span class="ident">err</span>().<span class="ident">unwrap</span>()),
+                    )))
+                    .<span class="ident">expect</span>(<span class="string">&quot;Action channel not usable in initialize_application()&quot;</span>);
+                <span class="kw">return</span>;
+            };
+        }
+
+        <span class="comment">// Commit AgentId to chain</span>
+        <span class="kw">let</span> <span class="ident">agent_id_entry</span> <span class="op">=</span> <span class="ident">context_clone</span>.<span class="ident">agent</span>.<span class="ident">to_entry</span>();
+        <span class="kw">let</span> <span class="ident">agent_id_commit</span> <span class="op">=</span> <span class="ident">block_on</span>(<span class="ident">commit_entry</span>(
+            <span class="ident">agent_id_entry</span>,
+            <span class="kw-2">&amp;</span><span class="ident">context_clone</span>.<span class="ident">action_channel</span>.<span class="ident">clone</span>(),
+            <span class="kw-2">&amp;</span><span class="ident">context_clone</span>,
+        ));
+
+        <span class="comment">// Let initialization fail if AgentId could not be committed.</span>
+        <span class="comment">// Currently this cannot happen since ToEntry for Agent always creates</span>
+        <span class="comment">// an entry from an Agent object. So I can&#39;t create a test for the code below.</span>
+        <span class="comment">// Hence skipping it for codecov for now but leaving it in for resilience.</span>
+        <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">tarpaulin</span>, <span class="ident">skip</span>)]</span>
+        {
+            <span class="kw">if</span> <span class="ident">agent_id_commit</span>.<span class="ident">is_err</span>() {
+                <span class="ident">context_clone</span>
+                    .<span class="ident">action_channel</span>
+                    .<span class="ident">send</span>(<span class="ident">ActionWrapper</span>::<span class="ident">new</span>(<span class="ident">Action</span>::<span class="ident">ReturnInitializationResult</span>(
+                        <span class="prelude-val">Some</span>(<span class="ident">agent_id_commit</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>()).<span class="ident">err</span>().<span class="ident">unwrap</span>()),
                     )))
                     .<span class="ident">expect</span>(<span class="string">&quot;Action channel not usable in initialize_application()&quot;</span>);
                 <span class="kw">return</span>;

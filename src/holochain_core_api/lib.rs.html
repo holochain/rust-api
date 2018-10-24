@@ -936,7 +936,7 @@
         <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">3</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
         <span class="comment">// Call the exposed wasm function that calls the Commit API function</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;test&quot;</span>, <span class="string">r#&quot;{}&quot;#</span>);
@@ -951,7 +951,7 @@
         <span class="comment">// Check in holochain instance&#39;s history that the commit event has been processed</span>
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">7</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">8</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -970,7 +970,7 @@
         <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">3</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
         <span class="comment">// Call the exposed wasm function that calls the Commit API function</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;test_fail&quot;</span>, <span class="string">r#&quot;{}&quot;#</span>);
@@ -985,7 +985,7 @@
         <span class="comment">// Check in holochain instance&#39;s history that the commit event has been processed</span>
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">5</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">6</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1005,7 +1005,7 @@
         <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">3</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
         <span class="comment">// Call the exposed wasm function that calls the Commit API function</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;debug_hello&quot;</span>, <span class="string">r#&quot;{}&quot;#</span>);
@@ -1019,7 +1019,7 @@
         <span class="comment">// Check in holochain instance&#39;s history that the debug event has been processed</span>
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">5</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">6</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1039,7 +1039,7 @@
         <span class="ident">hc</span>.<span class="ident">start</span>().<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t start&quot;</span>);
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">3</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
         <span class="comment">// Call the exposed wasm function that calls the Commit API function</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">hc</span>.<span class="ident">call</span>(<span class="string">&quot;test_zome&quot;</span>, <span class="string">&quot;test_cap&quot;</span>, <span class="string">&quot;debug_multiple&quot;</span>, <span class="string">r#&quot;{}&quot;#</span>);
@@ -1056,7 +1056,7 @@
         <span class="comment">// Check in holochain instance&#39;s history that the deb event has been processed</span>
         <span class="comment">// @TODO don&#39;t use history length in tests</span>
         <span class="comment">// @see https://github.com/holochain/holochain-rust/issues/195</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">5</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">hc</span>.<span class="ident">state</span>().<span class="ident">unwrap</span>().<span class="ident">history</span>.<span class="ident">len</span>(), <span class="number">6</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
