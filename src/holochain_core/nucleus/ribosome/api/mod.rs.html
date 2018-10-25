@@ -418,6 +418,24 @@
 <span id="418">418</span>
 <span id="419">419</span>
 <span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Module for ZomeApiFunctions</span>
 <span class="doccomment">//! ZomeApiFunctions are the functions provided by the ribosome that are callable by Zomes.</span>
@@ -427,15 +445,17 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">debug</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">get_entry</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">get_links</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">hash_entry</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">init_globals</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">link_entries</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">query</span>;
 
 <span class="kw">use</span> <span class="ident">holochain_dna</span>::<span class="ident">zome</span>::<span class="ident">capabilities</span>::<span class="ident">ReservedCapabilityNames</span>;
 <span class="kw">use</span> <span class="ident">nucleus</span>::<span class="ident">ribosome</span>::{
     <span class="ident">api</span>::{
         <span class="ident">call</span>::<span class="ident">invoke_call</span>, <span class="ident">commit</span>::<span class="ident">invoke_commit_app_entry</span>, <span class="ident">debug</span>::<span class="ident">invoke_debug</span>,
-        <span class="ident">get_entry</span>::<span class="ident">invoke_get_entry</span>, <span class="ident">get_links</span>::<span class="ident">invoke_get_links</span>,
-        <span class="ident">init_globals</span>::<span class="ident">invoke_init_globals</span>, <span class="ident">link_entries</span>::<span class="ident">invoke_link_entries</span>,
+        <span class="ident">get_entry</span>::<span class="ident">invoke_get_entry</span>, <span class="ident">get_links</span>::<span class="ident">invoke_get_links</span>, <span class="ident">hash_entry</span>::<span class="ident">invoke_hash_entry</span>,
+        <span class="ident">init_globals</span>::<span class="ident">invoke_init_globals</span>, <span class="ident">link_entries</span>::<span class="ident">invoke_link_entries</span>, <span class="ident">query</span>::<span class="ident">invoke_query</span>,
     },
     <span class="ident">Defn</span>, <span class="ident">Runtime</span>,
 };
@@ -488,6 +508,8 @@
 
     <span class="ident">LinkEntries</span>,
     <span class="ident">GetLinks</span>,
+    <span class="ident">Query</span>,
+    <span class="ident">HashEntry</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Defn</span> <span class="kw">for</span> <span class="ident">ZomeApiFunction</span> {
@@ -502,6 +524,8 @@
             <span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span> <span class="op">=&gt;</span> <span class="string">&quot;hc_call&quot;</span>,
             <span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span> <span class="op">=&gt;</span> <span class="string">&quot;hc_link_entries&quot;</span>,
             <span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span> <span class="op">=&gt;</span> <span class="string">&quot;hc_get_links&quot;</span>,
+            <span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span> <span class="op">=&gt;</span> <span class="string">&quot;hc_query&quot;</span>,
+            <span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span> <span class="op">=&gt;</span> <span class="string">&quot;hc_hash_entry&quot;</span>,
         }
     }
 
@@ -539,6 +563,8 @@
             <span class="string">&quot;hc_call&quot;</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span>),
             <span class="string">&quot;hc_link_entries&quot;</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span>),
             <span class="string">&quot;hc_get_links&quot;</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span>),
+            <span class="string">&quot;hc_query&quot;</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span>),
+            <span class="string">&quot;hc_hash_entry&quot;</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span>),
             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Cannot convert string to ZomeApiFunction&quot;</span>),
         }
     }
@@ -567,6 +593,8 @@
             <span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span> <span class="op">=&gt;</span> <span class="ident">invoke_call</span>,
             <span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span> <span class="op">=&gt;</span> <span class="ident">invoke_link_entries</span>,
             <span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span> <span class="op">=&gt;</span> <span class="ident">invoke_get_links</span>,
+            <span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span> <span class="op">=&gt;</span> <span class="ident">invoke_query</span>,
+            <span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span> <span class="op">=&gt;</span> <span class="ident">invoke_hash_entry</span>,
         }
     }
 }
@@ -779,6 +807,8 @@
             (<span class="string">&quot;hc_call&quot;</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span>),
             (<span class="string">&quot;hc_link_entries&quot;</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span>),
             (<span class="string">&quot;hc_get_links&quot;</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span>),
+            (<span class="string">&quot;hc_query&quot;</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span>),
+            (<span class="string">&quot;hc_hash_entry&quot;</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span>),
         ] {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ZomeApiFunction</span>::<span class="ident">from_str</span>(<span class="ident">input</span>).<span class="ident">unwrap</span>(), <span class="ident">output</span>);
         }
@@ -803,6 +833,8 @@
             (<span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span>, <span class="string">&quot;hc_call&quot;</span>),
             (<span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span>, <span class="string">&quot;hc_link_entries&quot;</span>),
             (<span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span>, <span class="string">&quot;hc_get_links&quot;</span>),
+            (<span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span>, <span class="string">&quot;hc_query&quot;</span>),
+            (<span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span>, <span class="string">&quot;hc_hash_entry&quot;</span>),
         ] {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="ident">input</span>.<span class="ident">as_str</span>());
         }
@@ -818,6 +850,8 @@
             (<span class="string">&quot;hc_call&quot;</span>, <span class="number">6</span>),
             (<span class="string">&quot;hc_link_entries&quot;</span>, <span class="number">7</span>),
             (<span class="string">&quot;hc_get_links&quot;</span>, <span class="number">8</span>),
+            (<span class="string">&quot;hc_query&quot;</span>, <span class="number">9</span>),
+            (<span class="string">&quot;hc_hash_entry&quot;</span>, <span class="number">10</span>),
         ] {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">str_to_index</span>(<span class="ident">input</span>));
         }
@@ -833,6 +867,8 @@
             (<span class="number">6</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">Call</span>),
             (<span class="number">7</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">LinkEntries</span>),
             (<span class="number">8</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">GetLinks</span>),
+            (<span class="number">9</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">Query</span>),
+            (<span class="number">10</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">HashEntry</span>),
         ] {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="ident">ZomeApiFunction</span>::<span class="ident">from_index</span>(<span class="ident">input</span>));
         }

@@ -226,8 +226,9 @@ participants running the DNA.</p>
                                   title='fn hdk::commit_entry'>commit_entry</a></td>
                            <td class='docblock-short'>
                                 <p>Attempts to commit an entry to your local source chain. The entry
-will have to pass the defined validation rules for that entry type. If the entry type is defined as public, will also publish the entry to the DHT. Returns either an
-address of the committed entry as a string, or an error.</p>
+will have to pass the defined validation rules for that entry type.
+If the entry type is defined as public, will also publish the entry to the DHT.
+Returns either an address of the committed entry as a string, or an error.</p>
 
                            </td>
                        </tr>
@@ -250,6 +251,15 @@ its address.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.get_entry_result.html"
+                                  title='fn hdk::get_entry_result'>get_entry_result</a></td>
+                           <td class='docblock-short'>
+                                <p>Retrieves an entry and meta data from the local chain or the DHT, by looking it up using
+its address, and a the full options to specify exactly what data to return</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.get_links.html"
                                   title='fn hdk::get_links'>get_links</a></td>
                            <td class='docblock-short'>
@@ -260,20 +270,23 @@ entries which matched as being linked by the given <code>tag</code>. Links are c
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="fn" href="fn.hash_entry.html"
+                                  title='fn hdk::hash_entry'>hash_entry</a></td>
+                           <td class='docblock-short'>
+                                <p>Reconstructs an address of the given entry data.
+This is the same value that would be returned if <code>entry_type_name</code> and <code>entry_value</code> were passed
+to the <code>commit_entry</code> function and by which it would be retrievable from the DHT using <code>get_entry</code>.
+This is often used to reconstruct an address of a <code>base</code> argument when calling <code>get_links</code>.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="fn" href="fn.link_entries.html"
                                   title='fn hdk::link_entries'>link_entries</a></td>
                            <td class='docblock-short'>
                                 <p>Consumes three values, two of which are the addresses of entries, and one of which is a string that defines a
 relationship between them, called a <code>tag</code>. Later, lists of entries can be looked up by using <code>get_links</code>. Entries
 can only be looked up in the direction from the <code>base</code>, which is the first argument, to the <code>target</code>.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.make_hash.html"
-                                  title='fn hdk::make_hash'>make_hash</a></td>
-                           <td class='docblock-short'>
-                                <p>Not Yet Available</p>
 
                            </td>
                        </tr>
@@ -289,7 +302,9 @@ can only be looked up in the direction from the <code>base</code>, which is the 
                            <td><a class="fn" href="fn.query.html"
                                   title='fn hdk::query'>query</a></td>
                            <td class='docblock-short'>
-                                <p>Not Yet Available</p>
+                                <p>Returns a list of entries from your local source chain, that match a given type.
+entry_type_name: Specify type of entry to retrieve
+limit: Max number of entries to retrieve</p>
 
                            </td>
                        </tr>

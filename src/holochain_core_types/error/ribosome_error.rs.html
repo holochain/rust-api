@@ -148,6 +148,9 @@
 <span id="148">148</span>
 <span id="149">149</span>
 <span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="self">self</span>::{<span class="ident">RibosomeErrorCode</span>::<span class="kw-2">*</span>, <span class="ident">RibosomeReturnCode</span>::<span class="kw-2">*</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
@@ -195,6 +198,7 @@
     <span class="ident">ResponseSerializationFailed</span>     <span class="op">=</span> <span class="number">7</span> <span class="op">&lt;&lt;</span> <span class="number">16</span>,
     <span class="ident">NotAnAllocation</span>                 <span class="op">=</span> <span class="number">8</span> <span class="op">&lt;&lt;</span> <span class="number">16</span>,
     <span class="ident">ZeroSizedAllocation</span>             <span class="op">=</span> <span class="number">9</span> <span class="op">&lt;&lt;</span> <span class="number">16</span>,
+    <span class="ident">UnknownEntryType</span>                <span class="op">=</span> <span class="number">10</span> <span class="op">&lt;&lt;</span> <span class="number">16</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ToString</span> <span class="kw">for</span> <span class="ident">RibosomeReturnCode</span> {
@@ -219,6 +223,7 @@
             <span class="ident">ResponseSerializationFailed</span>     <span class="op">=&gt;</span> <span class="string">&quot;Response serialization failed&quot;</span>,
             <span class="ident">NotAnAllocation</span>                 <span class="op">=&gt;</span> <span class="string">&quot;Not an allocation&quot;</span>,
             <span class="ident">ZeroSizedAllocation</span>             <span class="op">=&gt;</span> <span class="string">&quot;Zero-sized allocation&quot;</span>,
+            <span class="ident">UnknownEntryType</span>                <span class="op">=&gt;</span> <span class="string">&quot;Unknown entry type&quot;</span>,
         }.<span class="ident">to_string</span>()
     }
 }
@@ -248,6 +253,7 @@
             <span class="number">7</span> <span class="op">=&gt;</span> <span class="ident">ResponseSerializationFailed</span>,
             <span class="number">8</span> <span class="op">=&gt;</span> <span class="ident">NotAnAllocation</span>,
             <span class="number">9</span> <span class="op">=&gt;</span> <span class="ident">ZeroSizedAllocation</span>,
+            <span class="number">10</span> <span class="op">=&gt;</span> <span class="ident">UnknownEntryType</span>,
             <span class="number">1</span> <span class="op">|</span> <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">Unspecified</span>,
         }
     }
