@@ -69,7 +69,9 @@ It is automatically called at startup of each Zome function call.</p>
                            <td><a class="macro" href="macro.define_zome.html"
                                   title='macro hdk::define_zome'>define_zome</a></td>
                            <td class='docblock-short'>
-                                <p>A macro for describing zomes</p>
+                                <p>Every Zome must utilize the <code>define_zome</code>
+macro in the main library file in their Zome.
+The <code>define_zome</code> macro has 3 general parts:</p>
 
                            </td>
                        </tr>
@@ -77,14 +79,10 @@ It is automatically called at startup of each Zome function call.</p>
                            <td><a class="macro" href="macro.entry.html"
                                   title='macro hdk::entry'>entry</a></td>
                            <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.load_json.html"
-                                  title='macro hdk::load_json'>load_json</a></td>
-                           <td class='docblock-short'>
-                                
+                                <p>The <code>entry</code> macro is a helper for creating <code>ValidatingEntryType</code> definitions
+for use within the <a href="macro.define_zome.html">define_zome</a> macro.
+It has 6 component parts:</p>
+
                            </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
