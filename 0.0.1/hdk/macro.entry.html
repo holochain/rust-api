@@ -15,7 +15,7 @@ for use within the <a href="macro.define_zome.html">define_zome</a> macro.
 It has 6 component parts:</p>
 <ol>
 <li>name: <code>name</code> is simply the descriptive name of the entry type, such as &quot;post&quot;, or &quot;user&quot;.
-It is what must be given as the <code>entry_type_name</code> argument when calling <code>commit_entry</code> and the other data read/write functions.</li>
+It is what must be given as the <code>entry_type_name</code> argument when calling <a href="fn.commit_entry.html">commit_entry</a> and the other data read/write functions.</li>
 <li>description: <code>description</code> is something that is primarily for human readers of your code, just describe this entry type</li>
 <li>sharing: <code>sharing</code> defines what distribution over the DHT, or not, occurs with entries of this type, possible values
 are defined in the <a href="../holochain_dna/zome/entry_types/enum.Sharing.html">Sharing</a> enum</li>
@@ -24,7 +24,7 @@ are defined in the <a href="../holochain_dna/zome/entry_types/enum.Sharing.html"
 when attempting to validate entries of this type.
 Possible values are found within <a href="enum.ValidationPackageDefinition.html">ValidationPackageDefinition</a></li>
 <li>validation: <code>validation</code> is a callback function which will be called any time that a
-source chain action is taken relating to this entry type, such as <code>commit_entry</code>, <code>update_entry</code>, <code>remove_entry</code>.
+source chain action is taken relating to this entry type, such as <a href="fn.commit_entry.html">commit_entry</a>, <a href="fn.update_entry.html">update_entry</a>, <a href="fn.remove_entry.html">remove_entry</a>.
 It always expects two arguments, the first of which is the entry attempting to be validated,
 the second is the validation <code>context</code>, which offers a variety of metadata useful for validation.</li>
 </ol>
