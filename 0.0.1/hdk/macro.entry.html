@@ -18,11 +18,11 @@ It has 6 component parts:</p>
 It is what must be given as the <code>entry_type_name</code> argument when calling <code>commit_entry</code> and the other data read/write functions.</li>
 <li>description: <code>description</code> is something that is primarily for human readers of your code, just describe this entry type</li>
 <li>sharing: <code>sharing</code> defines what distribution over the DHT, or not, occurs with entries of this type, possible values
-are defined in the <a href="/0.0.1/holochain_dna/zome/entry_types/enum.Sharing.html">Sharing</a> enum</li>
+are defined in the <a href="../holochain_dna/zome/entry_types/enum.Sharing.html">Sharing</a> enum</li>
 <li>native_type: <code>native_type</code> references a given Rust struct, which provides a clear schema for entries of this type.</li>
 <li>validation_package: <code>validation_package</code> is a special identifier, which declares which data is required from peers
 when attempting to validate entries of this type.
-Possible values are found within <a href="/0.0.1//hdk/enum.ValidationPackageDefinition.html">ValidationPackageDefinition</a></li>
+Possible values are found within <a href="enum.ValidationPackageDefinition.html">ValidationPackageDefinition</a></li>
 <li>validation: <code>validation</code> is a callback function which will be called any time that a
 source chain action is taken relating to this entry type, such as <code>commit_entry</code>, <code>update_entry</code>, <code>remove_entry</code>.
 It always expects two arguments, the first of which is the entry attempting to be validated,
